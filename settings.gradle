@@ -1,26 +1,18 @@
-pluginManagement {
-    repositories {
-        google()
-        mavenCentral()
-        gradlePluginPortal()
-    }
-}
+//core game code modules
+include ':SPD-classes'
+include ':core'
 
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
+//platform modules
+include ':android'              // Requires Android SDK
+//include ':ios'                // Requires RoboVM
+include ':desktop'
+// Future: include ':html'     // Browser target (GWT/TeaVM)
 
-rootProject.name = 'pixel-dungeon'
-
-include ':pd-classes'
-include ':android'
-
-// Future cross-platform modules:
-// include ':core'     // Platform-independent game logic
-// include ':html'     // Browser target (GWT/TeaVM)
-// include ':ios'      // iOS target (RoboVM/MOE)
-// include ':desktop'  // Desktop target (LWJGL)
+//service modules
+include ':services'
+    //updates
+    include ':services:updates:debugUpdates'
+    include ':services:updates:githubUpdates'
+    //news
+    include ':services:news:debugNews'
+    include ':services:news:shatteredNews'

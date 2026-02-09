@@ -1,24 +1,39 @@
-// Pixel Dungeon - Root Build Configuration
-// Multi-module Gradle project migrated from Eclipse
-
-plugins {
-    id 'com.android.application' version '8.2.2' apply false
-    id 'com.android.library' version '8.2.2' apply false
-}
-
-allprojects {
-    ext {
-        appName = 'Pixel Dungeon'
-        appVersionCode = 74
-        appVersionName = '1.9.1'
-        appPackage = 'com.watabou.pixeldungeon'
-
-        compileSdkVersion = 34
-        minSdkVersion = 21
-        targetSdkVersion = 34
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.13.2'
     }
 }
 
-task clean(type: Delete) {
-    delete rootProject.layout.buildDirectory
+allprojects {
+
+    ext {
+        appName = 'Pixel Dungeon'
+        appPackageName = 'com.shatteredpixel.shatteredpixeldungeon'
+
+        appVersionCode = 890
+        appVersionName = '3.3.5'
+
+        appJavaCompatibility = JavaVersion.VERSION_11
+
+        appAndroidCompileSDK = 35   //Android 15
+        appAndroidMinSDK = 21       //Android 5.0
+        appAndroidTargetSDK = 35    //Android 15
+
+        gdxVersion = '1.14.0'
+        gdxControllersVersion = '2.2.4'
+        robovmVersion = '2.3.24'
+    }
+    version = appVersionName
+
+    repositories {
+        // Local repo for offline builds (optional, created by fetch-deps.sh)
+        maven { url "${rootDir}/local-repo" }
+        google()
+        mavenCentral()
+    }
+
 }

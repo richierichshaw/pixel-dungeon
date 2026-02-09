@@ -1,65 +1,49 @@
-Pixel Dungeon
-=============
+# Pixel Dungeon (Cross-Platform)
 
-Traditional roguelike game with pixel-art graphics and simple interface.
+Personal cross-platform build of Pixel Dungeon, based on [Shattered Pixel Dungeon](https://github.com/00-Evan/shattered-pixel-dungeon) by [00-Evan](https://shatteredpixel.com/), which is itself based on the [original Pixel Dungeon](https://github.com/watabou/pixel-dungeon) by [Watabou](https://watabou.itch.io/).
 
-Based on the original by Oleg Dolya (watabou).
+## Targets
+
+| Platform | Status | Module |
+|----------|--------|--------|
+| Desktop (Windows/Mac/Linux) | Working | `desktop/` |
+| Android | Available (needs SDK) | `android/` |
+| iOS | Planned | `ios/` |
+| Browser (HTML5) | Planned | `html/` |
+
+## Quick Start (Desktop)
+
+```bash
+# Build and run
+./gradlew desktop:debug
+
+# Build release JAR
+./gradlew desktop:release
+```
 
 ## Project Structure
 
 ```
 pixel-dungeon/
-├── android/          # Android application module
-│   └── src/main/
-│       ├── java/     # Game source code
-│       ├── assets/   # Sprites, tilesets, audio
-│       └── res/      # Android resources (icons, strings)
-├── pd-classes/       # Noosa engine library module
-│   └── src/main/
-│       └── java/     # Engine source (rendering, audio, input, utils)
-├── build.gradle      # Root build configuration
-├── settings.gradle   # Module includes
-└── gradle/           # Gradle wrapper
+├── SPD-classes/     # Noosa engine (libGDX-based)
+├── core/            # Game logic (platform-independent)
+├── android/         # Android launcher
+├── desktop/         # Desktop launcher (LWJGL3)
+├── ios/             # iOS launcher (RoboVM)
+├── services/        # Update/news services
+└── docs/            # Build guides
 ```
 
-## Building
+## Prerequisites
 
-### Prerequisites
+- **JDK 11+** (JDK 17 recommended)
+- **Android SDK** (only for Android builds)
+- **RoboVM** (only for iOS builds)
 
-- Java 11+ (JDK)
-- Android SDK with:
-  - Build Tools 34.0.0+
-  - Platform SDK 34
+## Credits
 
-### Setup
-
-1. Install the Android SDK and set `ANDROID_HOME` environment variable, or create
-   a `local.properties` file in the project root:
-
-```properties
-sdk.dir=/path/to/your/android/sdk
-```
-
-2. Build the debug APK:
-
-```bash
-./gradlew android:assembleDebug
-```
-
-3. The APK will be at `android/build/outputs/apk/debug/android-debug.apk`
-
-## Future Targets
-
-This project is structured for cross-platform expansion:
-
-- **Browser** (HTML5 via GWT/TeaVM)
-- **iOS** (via RoboVM or Multi-OS Engine)
-- **Desktop** (via LWJGL)
-
-## Original Links
-
-- Original source: https://github.com/watabou/pixel-dungeon
-- Engine library: https://github.com/watabou/PD-classes
+- Original game: [Watabou](https://watabou.itch.io/) (GPLv3)
+- Cross-platform port & content: [Shattered Pixel](https://shatteredpixel.com/)
 
 ## License
 
