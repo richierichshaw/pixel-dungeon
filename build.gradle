@@ -1,0 +1,24 @@
+// Pixel Dungeon - Root Build Configuration
+// Multi-module Gradle project migrated from Eclipse
+
+plugins {
+    id 'com.android.application' version '8.2.2' apply false
+    id 'com.android.library' version '8.2.2' apply false
+}
+
+allprojects {
+    ext {
+        appName = 'Pixel Dungeon'
+        appVersionCode = 74
+        appVersionName = '1.9.1'
+        appPackage = 'com.watabou.pixeldungeon'
+
+        compileSdkVersion = 34
+        minSdkVersion = 21
+        targetSdkVersion = 34
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.layout.buildDirectory
+}

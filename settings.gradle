@@ -1,0 +1,26 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.name = 'pixel-dungeon'
+
+include ':pd-classes'
+include ':android'
+
+// Future cross-platform modules:
+// include ':core'     // Platform-independent game logic
+// include ':html'     // Browser target (GWT/TeaVM)
+// include ':ios'      // iOS target (RoboVM/MOE)
+// include ':desktop'  // Desktop target (LWJGL)

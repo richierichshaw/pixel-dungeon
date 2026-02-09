@@ -1,0 +1,25 @@
+// PD-classes (Noosa Engine) - Android Library Module
+// Custom game engine by watabou providing rendering, audio, input, and scene management
+
+plugins {
+    id 'com.android.library'
+}
+
+android {
+    namespace 'com.watabou.noosa'
+    compileSdk rootProject.ext.compileSdkVersion
+
+    defaultConfig {
+        minSdk rootProject.ext.minSdkVersion
+        targetSdk rootProject.ext.targetSdkVersion
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+
+    lint {
+        abortOnError false
+    }
+}
