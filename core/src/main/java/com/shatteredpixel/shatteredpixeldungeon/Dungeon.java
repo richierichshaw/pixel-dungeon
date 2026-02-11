@@ -264,7 +264,7 @@ public class Dungeon {
 		branch = 0;
 		generatedLevels.clear();
 
-		gold = 0;
+		gold = SPDSettings.customGold();
 		energy = 0;
 
 		droppedItems = new SparseArray<>();

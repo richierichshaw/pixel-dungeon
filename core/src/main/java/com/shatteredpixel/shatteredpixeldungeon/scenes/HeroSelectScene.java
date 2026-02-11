@@ -44,6 +44,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.StyledButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 import com.shatteredpixel.shatteredpixeldungeon.utils.DungeonSeed;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndChallenges;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndCustomDifficulty;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndHeroInfo;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndKeyBindings;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndMessage;
@@ -406,6 +407,8 @@ public class HeroSelectScene extends PixelScene {
 			btnOptions.icon().hardlight(1f, 1.5f, 0.67f);
 		} else if (SPDSettings.challenges() != 0){
 			btnOptions.icon().hardlight(2f, 1.33f, 0.5f);
+		} else if (SPDSettings.isCustomDifficultyActive()){
+			btnOptions.icon().hardlight(0.67f, 1f, 1.5f);
 		} else {
 			btnOptions.icon().resetColor();
 		}
@@ -820,6 +823,17 @@ public class HeroSelectScene extends PixelScene {
 			challengeButton.icon(Icons.get(SPDSettings.challenges() > 0 ? Icons.CHALLENGE_COLOR : Icons.CHALLENGE_GREY));
 			add(challengeButton);
 			buttons.add(challengeButton);
+
+			StyledButton difficultyButton = new StyledButton(Chrome.Type.BLANK, Messages.get(HeroSelectScene.class, "custom_diff"), 6){
+				@Override
+				protected void onClick() {
+					ShatteredPixelDungeon.scene().addToFront(new WndCustomDifficulty());
+				}
+			};
+			difficultyButton.leftJustify = true;
+			difficultyButton.icon(Icons.get(Icons.TALENT));
+			add(difficultyButton);
+			buttons.add(difficultyButton);
 
 			int unlockedCount = 0;
 			for (HeroClass cls : HeroClass.values()){

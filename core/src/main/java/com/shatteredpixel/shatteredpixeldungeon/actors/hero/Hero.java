@@ -243,18 +243,18 @@ public class Hero extends Char {
 	public Hero() {
 		super();
 
-		HP = HT = 20;
-		STR = STARTING_STR;
-		
+		HP = HT = SPDSettings.customHP();
+		STR = SPDSettings.customSTR();
+
 		belongings = new Belongings( this );
-		
+
 		visibleEnemies = new ArrayList<>();
 	}
 	
 	public void updateHT( boolean boostHP ){
 		int curHT = HT;
-		
-		HT = 20 + 5*(lvl-1) + HTBoost;
+
+		HT = SPDSettings.customHP() + 5*(lvl-1) + HTBoost;
 		float multiplier = RingOfMight.HTMultiplier(this);
 		HT = Math.round(multiplier * HT);
 		

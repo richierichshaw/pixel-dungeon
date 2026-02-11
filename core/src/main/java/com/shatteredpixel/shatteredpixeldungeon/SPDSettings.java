@@ -283,6 +283,40 @@ public class SPDSettings extends GameSettings {
 		return getBoolean(KEY_VICTORY_NAGGED, false);
 	}
 
+	//Custom Difficulty
+
+	public static final String KEY_CUSTOM_HP        = "custom_hp";
+	public static final String KEY_CUSTOM_STR       = "custom_str";
+	public static final String KEY_CUSTOM_GOLD      = "custom_gold";
+
+	public static void customHP( int value ) {
+		put( KEY_CUSTOM_HP, value );
+	}
+
+	public static int customHP() {
+		return getInt( KEY_CUSTOM_HP, 20, 5, 50 );
+	}
+
+	public static void customSTR( int value ) {
+		put( KEY_CUSTOM_STR, value );
+	}
+
+	public static int customSTR() {
+		return getInt( KEY_CUSTOM_STR, 10, 5, 20 );
+	}
+
+	public static void customGold( int value ) {
+		put( KEY_CUSTOM_GOLD, value );
+	}
+
+	public static int customGold() {
+		return getInt( KEY_CUSTOM_GOLD, 0, 0, 500 );
+	}
+
+	public static boolean isCustomDifficultyActive() {
+		return customHP() != 20 || customSTR() != 10 || customGold() != 0;
+	}
+
 	//Input
 
 	public static final String KEY_CONTROLLER_SENS  = "controller_sens";

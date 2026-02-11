@@ -35,7 +35,7 @@ public abstract class OptionSlider extends Component {
 
 	private PointerArea pointerArea;
 
-	private RenderedTextBlock title;
+	protected RenderedTextBlock title;
 	private RenderedTextBlock minTxt;
 	private RenderedTextBlock maxTxt;
 
