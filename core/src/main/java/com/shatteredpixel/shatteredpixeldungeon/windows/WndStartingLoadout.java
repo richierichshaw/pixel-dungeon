@@ -139,8 +139,8 @@ public class WndStartingLoadout extends Window {
 		int contentHeight = (int) Math.min(pos, MAX_HEIGHT - TTL_HEIGHT);
 
 		ScrollPane pane = new ScrollPane(content);
-		pane.setRect(0, TTL_HEIGHT, WIDTH, contentHeight);
 		add(pane);
+		pane.setRect(0, TTL_HEIGHT, WIDTH, contentHeight);
 
 		resize(WIDTH, TTL_HEIGHT + contentHeight);
 	}
