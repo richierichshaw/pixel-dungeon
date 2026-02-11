@@ -45,6 +45,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 import com.shatteredpixel.shatteredpixeldungeon.utils.DungeonSeed;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndChallenges;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndCustomDifficulty;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndStartingLoadout;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndHeroInfo;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndKeyBindings;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndMessage;
@@ -834,6 +835,17 @@ public class HeroSelectScene extends PixelScene {
 			difficultyButton.icon(Icons.get(Icons.TALENT));
 			add(difficultyButton);
 			buttons.add(difficultyButton);
+
+			StyledButton loadoutButton = new StyledButton(Chrome.Type.BLANK, Messages.get(HeroSelectScene.class, "custom_loadout"), 6){
+				@Override
+				protected void onClick() {
+					ShatteredPixelDungeon.scene().addToFront(new WndStartingLoadout());
+				}
+			};
+			loadoutButton.leftJustify = true;
+			loadoutButton.icon(Icons.get(Icons.BACKPACK_LRG));
+			add(loadoutButton);
+			buttons.add(loadoutButton);
 
 			int unlockedCount = 0;
 			for (HeroClass cls : HeroClass.values()){

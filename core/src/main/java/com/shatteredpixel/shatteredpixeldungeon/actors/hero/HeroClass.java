@@ -48,6 +48,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.He
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.Shockwave;
 import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.Waterskin;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClothArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
@@ -71,9 +72,15 @@ import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfMagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Cudgel;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Dagger;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Dirk;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Gloves;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.HandAxe;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Quarterstaff;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Rapier;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Shortsword;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Sickle;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Spear;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WornShortsword;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingKnife;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingSpike;
@@ -140,6 +147,56 @@ public enum HeroClass {
 			case CLERIC:
 				initCleric( hero );
 				break;
+		}
+
+		//apply custom starting weapon override if set
+		int customWep = SPDSettings.customWeapon();
+		if (customWep != 0) {
+			KindOfWeapon weapon;
+			switch (customWep) {
+				case 1: default:
+					weapon = new WornShortsword();
+					break;
+				case 2:
+					weapon = new Dagger();
+					break;
+				case 3:
+					weapon = new Gloves();
+					break;
+				case 4:
+					weapon = new Rapier();
+					break;
+				case 5:
+					weapon = new Cudgel();
+					break;
+				case 6:
+					weapon = new MagesStaff(new WandOfMagicMissile());
+					break;
+				//tier 2
+				case 7:
+					weapon = new Shortsword();
+					break;
+				case 8:
+					weapon = new HandAxe();
+					break;
+				case 9:
+					weapon = new Spear();
+					break;
+				case 10:
+					weapon = new Quarterstaff();
+					break;
+				case 11:
+					weapon = new Dirk();
+					break;
+				case 12:
+					weapon = new Sickle();
+					break;
+			}
+			weapon.identify();
+			hero.belongings.weapon = weapon;
+			if (weapon instanceof MagesStaff) {
+				weapon.activate(hero);
+			}
 		}
 
 		if (SPDSettings.quickslotWaterskin()) {

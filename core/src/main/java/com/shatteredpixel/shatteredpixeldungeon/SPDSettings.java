@@ -317,6 +317,21 @@ public class SPDSettings extends GameSettings {
 		return customHP() != 20 || customSTR() != 10 || customGold() != 0;
 	}
 
+	//Custom Starting Loadout
+	// 0 = class default, 1-6 = tier 1 weapons, 7-12 = tier 2 weapons
+	// T1: 1=WornShortsword, 2=Dagger, 3=Gloves, 4=Rapier, 5=Cudgel, 6=MagesStaff
+	// T2: 7=Shortsword, 8=HandAxe, 9=Spear, 10=Quarterstaff, 11=Dirk, 12=Sickle
+
+	public static final String KEY_CUSTOM_WEAPON    = "custom_weapon";
+
+	public static void customWeapon( int value ) {
+		put( KEY_CUSTOM_WEAPON, value );
+	}
+
+	public static int customWeapon() {
+		return getInt( KEY_CUSTOM_WEAPON, 0, 0, 12 );
+	}
+
 	//Input
 
 	public static final String KEY_CONTROLLER_SENS  = "controller_sens";
