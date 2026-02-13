@@ -39,7 +39,6 @@ import java.util.ArrayList;
 public class WndStartingLoadout extends Window {
 
 	private static final int WIDTH = 120;
-	private static final int MAX_HEIGHT = 200;
 	private static final int TTL_HEIGHT = 16;
 	private static final int BTN_HEIGHT = 16;
 	private static final int GAP = 1;
@@ -136,7 +135,8 @@ public class WndStartingLoadout extends Window {
 
 		content.setSize(WIDTH, pos);
 
-		int contentHeight = (int) Math.min(pos, MAX_HEIGHT - TTL_HEIGHT);
+		int maxHeight = (int)(PixelScene.uiCamera.height - 20);
+		int contentHeight = (int) Math.min(pos, maxHeight - TTL_HEIGHT);
 
 		ScrollPane pane = new ScrollPane(content);
 		add(pane);
