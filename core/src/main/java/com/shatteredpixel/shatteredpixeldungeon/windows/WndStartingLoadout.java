@@ -138,29 +138,37 @@ public class WndStartingLoadout extends Window {
 		int maxHeight = (int)(PixelScene.uiCamera.height - 20);
 		int contentHeight = (int) Math.min(pos, maxHeight - TTL_HEIGHT);
 
-		ScrollPane pane = new ScrollPane(content);
+		ScrollPane pane = new ScrollPane(content) {
+			@Override
+			public void onClick(float x, float y) {
+				for (int i = 0; i < buttons.size(); i++) {
+					if (buttons.get(i).inside(x, y)) {
+						selectWeapon(i);
+						break;
+					}
+				}
+			}
+		};
 		add(pane);
 		resize(WIDTH, TTL_HEIGHT + contentHeight);
 		pane.setRect(0, TTL_HEIGHT, WIDTH, contentHeight);
 	}
 
+	private void selectWeapon(int index) {
+		SPDSettings.customWeapon(index);
+		for (StyledButton b : buttons) {
+			b.icon().resetColor();
+			b.textColor(WHITE);
+		}
+		buttons.get(index).icon().hardlight(TITLE_COLOR);
+		buttons.get(index).textColor(TITLE_COLOR);
+	}
+
 	private float addWeaponButton(Component content, int index, int selected, float pos) {
-		final int idx = index;
 
 		String label = Messages.get(WndStartingLoadout.class, WEAPON_KEYS[index]);
 
-		StyledButton btn = new StyledButton(Chrome.Type.GREY_BUTTON_TR, label, 6) {
-			@Override
-			protected void onClick() {
-				SPDSettings.customWeapon(idx);
-				for (StyledButton b : buttons) {
-					b.icon().resetColor();
-					b.textColor(WHITE);
-				}
-				icon().hardlight(TITLE_COLOR);
-				textColor(TITLE_COLOR);
-			}
-		};
+		StyledButton btn = new StyledButton(Chrome.Type.GREY_BUTTON_TR, label, 6);
 		btn.leftJustify = true;
 
 		if (index == 0) {
