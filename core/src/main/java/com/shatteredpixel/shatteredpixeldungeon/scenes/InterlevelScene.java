@@ -410,52 +410,72 @@ public class InterlevelScene extends PixelScene {
 		timeLeft = fadeTime;
 		
 		if (thread == null) {
-			thread = new Thread() {
-				@Override
-				public void run() {
-					
-					try {
-
-						Actor.fixTime();
-
-						switch (mode) {
-							case DESCEND:
-								descend();
-								break;
-							case ASCEND:
-								ascend();
-								break;
-							case CONTINUE:
-								restore();
-								break;
-							case RESURRECT:
-								resurrect();
-								break;
-							case RETURN:
-								returnTo();
-								break;
-							case FALL:
-								fall();
-								break;
-							case RESET:
-								reset();
-								break;
-						}
-						
-					} catch (Exception e) {
-						
-						error = e;
-						
+			if (DeviceCompat.isBrowser()) {
+				// Browser: run level loading synchronously (no threads available)
+				try {
+					Actor.fixTime();
+					switch (mode) {
+						case DESCEND:  descend();   break;
+						case ASCEND:   ascend();    break;
+						case CONTINUE: restore();   break;
+						case RESURRECT:resurrect();  break;
+						case RETURN:   returnTo();  break;
+						case FALL:     fall();       break;
+						case RESET:    reset();      break;
 					}
-
-					synchronized (thread) {
-						if (phase == Phase.STATIC && error == null) {
-							afterLoading();
-						}
-					}
+				} catch (Exception e) {
+					error = e;
 				}
-			};
-			thread.start();
+				// Mark loading as complete with a dead thread sentinel
+				thread = new Thread();
+			} else {
+				thread = new Thread() {
+					@Override
+					public void run() {
+
+						try {
+
+							Actor.fixTime();
+
+							switch (mode) {
+								case DESCEND:
+									descend();
+									break;
+								case ASCEND:
+									ascend();
+									break;
+								case CONTINUE:
+									restore();
+									break;
+								case RESURRECT:
+									resurrect();
+									break;
+								case RETURN:
+									returnTo();
+									break;
+								case FALL:
+									fall();
+									break;
+								case RESET:
+									reset();
+									break;
+							}
+
+						} catch (Exception e) {
+
+							error = e;
+
+						}
+
+						synchronized (thread) {
+							if (phase == Phase.STATIC && error == null) {
+								afterLoading();
+							}
+						}
+					}
+				};
+				thread.start();
+			}
 		}
 		waitingTime = 0f;
 	}

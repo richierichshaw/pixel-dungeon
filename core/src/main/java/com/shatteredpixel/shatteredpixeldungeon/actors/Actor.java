@@ -240,27 +240,68 @@ public abstract class Actor implements Bundlable {
 	}
 	
 	public static boolean keepActorThreadAlive = true;
-	
+
+	// Browser-compatible cooperative actor processing.
+	// Called each frame from GameScene.update() instead of running in a thread.
+	// Processes actors until one yields (returns doNext=false) or a sprite is moving.
+	public static void processStep() {
+		boolean doNext;
+
+		do {
+			current = null;
+			if (!Game.switchingScene()) {
+				float earliest = Float.MAX_VALUE;
+				for (Actor actor : all) {
+					if (actor.time < earliest ||
+							actor.time == earliest && (current == null || actor.actPriority > current.actPriority)) {
+						earliest = actor.time;
+						current = actor;
+					}
+				}
+			}
+
+			if (current != null) {
+				now = current.time;
+				Actor acting = current;
+
+				// If sprite is still moving, defer until next frame
+				if (acting instanceof Char && ((Char) acting).sprite != null
+						&& ((Char) acting).sprite.isMoving) {
+					current = null;
+					return;
+				}
+
+				doNext = acting.act();
+				if (doNext && (Dungeon.hero == null || !Dungeon.hero.isAlive())) {
+					doNext = false;
+					current = null;
+				}
+			} else {
+				doNext = false;
+			}
+		} while (doNext);
+	}
+
 	public static void process() {
-		
+
 		boolean doNext;
 		boolean interrupted = false;
 
 		do {
-			
+
 			current = null;
 			if (!interrupted && !Game.switchingScene()) {
 				float earliest = Float.MAX_VALUE;
 
 				for (Actor actor : all) {
-					
+
 					//some actors will always go before others if time is equal.
 					if (actor.time < earliest ||
 							actor.time == earliest && (current == null || actor.actPriority > current.actPriority)) {
 						earliest = actor.time;
 						current = actor;
 					}
-					
+
 				}
 			}
 
@@ -282,9 +323,9 @@ public abstract class Actor implements Bundlable {
 						interrupted = true;
 					}
 				}
-				
+
 				interrupted = interrupted || Thread.interrupted();
-				
+
 				if (interrupted){
 					doNext = false;
 					current = null;
@@ -301,9 +342,9 @@ public abstract class Actor implements Bundlable {
 
 			if (!doNext){
 				synchronized (Thread.currentThread()) {
-					
+
 					interrupted = interrupted || Thread.interrupted();
-					
+
 					if (interrupted){
 						current = null;
 						interrupted = false;
@@ -311,7 +352,7 @@ public abstract class Actor implements Bundlable {
 
 					//signals to the gamescene that actor processing is finished for now
 					Thread.currentThread().notify();
-					
+
 					try {
 						Thread.currentThread().wait();
 					} catch (InterruptedException e) {

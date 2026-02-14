@@ -34,6 +34,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.watabou.utils.DeviceCompat;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ChampionEnemy;
@@ -768,7 +769,7 @@ public class GameScene extends PixelScene {
 	public void destroy() {
 		
 		//tell the actor thread to finish, then wait for it to complete any actions it may be doing.
-		if (!waitForActorThread( 4500, true )){
+		if (!DeviceCompat.isBrowser() && !waitForActorThread( 4500, true )){
 			Throwable t = new Throwable();
 			t.setStackTrace(actorThread.getStackTrace());
 			throw new RuntimeException("timeout waiting for actor thread! ", t);
@@ -784,6 +785,7 @@ public class GameScene extends PixelScene {
 	}
 	
 	public static void endActorThread(){
+		if (DeviceCompat.isBrowser()) return;
 		if (actorThread != null && actorThread.isAlive()){
 			Actor.keepActorThreadAlive = false;
 			actorThread.interrupt();
@@ -791,6 +793,7 @@ public class GameScene extends PixelScene {
 	}
 
 	public boolean waitForActorThread(int msToWait, boolean interrupt){
+		if (DeviceCompat.isBrowser()) return true;
 		if (actorThread == null || !actorThread.isAlive()) {
 			return true;
 		}
@@ -863,8 +866,11 @@ public class GameScene extends PixelScene {
 		}
 
 		if (!Actor.processing() && Dungeon.hero.isAlive()) {
-			if (actorThread == null || !actorThread.isAlive()) {
-				
+			if (DeviceCompat.isBrowser()) {
+				// Browser: process actors cooperatively in the render thread
+				Actor.processStep();
+			} else if (actorThread == null || !actorThread.isAlive()) {
+
 				actorThread = new Thread() {
 					@Override
 					public void run() {
