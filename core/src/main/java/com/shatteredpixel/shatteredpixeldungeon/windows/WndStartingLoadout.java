@@ -140,9 +140,8 @@ public class WndStartingLoadout extends Window {
 
 		ScrollPane pane = new ScrollPane(content);
 		add(pane);
-		pane.setRect(0, TTL_HEIGHT, WIDTH, contentHeight);
-
 		resize(WIDTH, TTL_HEIGHT + contentHeight);
+		pane.setRect(0, TTL_HEIGHT, WIDTH, contentHeight);
 	}
 
 	private float addWeaponButton(Component content, int index, int selected, float pos) {
