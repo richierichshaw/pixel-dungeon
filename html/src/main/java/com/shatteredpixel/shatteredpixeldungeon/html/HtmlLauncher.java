@@ -21,10 +21,12 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.html;
 
+import com.badlogic.gdx.Files;
 import com.github.xpenatan.gdx.teavm.backends.web.WebApplication;
 import com.github.xpenatan.gdx.teavm.backends.web.WebApplicationConfiguration;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.watabou.noosa.Game;
+import com.watabou.utils.FileUtils;
 
 public class HtmlLauncher {
 
@@ -32,6 +34,9 @@ public class HtmlLauncher {
 
 		Game.version = "3.3.5-BROWSER";
 		Game.versionCode = 890;
+
+		// Browser uses Local file type, backed by IndexedDB via gdx-teavm
+		FileUtils.setDefaultFileProperties(Files.FileType.Local, "");
 
 		WebApplicationConfiguration config = new WebApplicationConfiguration("canvas");
 		config.width = 0;   // 0 = auto-size to fill browser window
