@@ -4,7 +4,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.13.2'
+        //classpath 'com.android.tools.build:gradle:8.13.2'
     }
 }
 
@@ -34,6 +34,8 @@ allprojects {
         maven { url "${rootDir}/local-repo" }
         google()
         mavenCentral()
+        // TeaVM repository for browser target dependencies
+        maven { url "https://teavm.org/maven/repository/" }
     }
 
 }

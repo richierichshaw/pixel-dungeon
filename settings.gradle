@@ -3,10 +3,10 @@ include ':SPD-classes'
 include ':core'
 
 //platform modules
-include ':android'              // Requires Android SDK
+//include ':android'              // Requires Android SDK
 //include ':ios'                // Requires RoboVM
 include ':desktop'
-// Future: include ':html'     // Browser target (GWT/TeaVM)
+include ':html'                 // Browser target (TeaVM)
 
 //service modules
 include ':services'

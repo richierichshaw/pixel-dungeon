@@ -1,0 +1,51 @@
+plugins {
+    id 'java'
+}
+
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+java.sourceCompatibility = java.targetCompatibility = appJavaCompatibility
+
+def gdxTeaVMVersion = '1.5.1'
+
+dependencies {
+    implementation project(':core')
+
+    implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
+    implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+
+    // gdx-teavm backend (TeaVM compiler + web runtime)
+    implementation("com.github.xpenatan.gdx-teavm:backend-web:$gdxTeaVMVersion") {
+        // Exclude Jetty from Maven resolution (its POM chain is massive)
+        exclude group: 'org.eclipse.jetty'
+    }
+
+    // Jetty JARs added directly (bypasses POM parent chain resolution)
+    runtimeOnly files(
+        "${rootDir}/local-repo/org/eclipse/jetty/jetty-server/11.0.13/jetty-server-11.0.13.jar",
+        "${rootDir}/local-repo/org/eclipse/jetty/jetty-webapp/11.0.13/jetty-webapp-11.0.13.jar",
+        "${rootDir}/local-repo/org/eclipse/jetty/jetty-servlet/11.0.13/jetty-servlet-11.0.13.jar",
+        "${rootDir}/local-repo/org/eclipse/jetty/jetty-http/11.0.13/jetty-http-11.0.13.jar",
+        "${rootDir}/local-repo/org/eclipse/jetty/jetty-io/11.0.13/jetty-io-11.0.13.jar",
+        "${rootDir}/local-repo/org/eclipse/jetty/jetty-util/11.0.13/jetty-util-11.0.13.jar",
+        "${rootDir}/local-repo/org/eclipse/jetty/jetty-security/11.0.13/jetty-security-11.0.13.jar",
+        "${rootDir}/local-repo/org/eclipse/jetty/jetty-xml/11.0.13/jetty-xml-11.0.13.jar",
+        "${rootDir}/local-repo/jakarta/servlet/jakarta.servlet-api/5.0.0/jakarta.servlet-api-5.0.0.jar",
+        "${rootDir}/local-repo/org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.jar"
+    )
+
+    // FreeType compiled to WebAssembly via Emscripten
+    implementation "com.github.xpenatan.gdx-teavm:gdx-freetype-teavm:$gdxTeaVMVersion"
+
+    // Service implementations (news/updates disabled in browser)
+    implementation project(':services:updates:debugUpdates')
+    implementation project(':services:news:debugNews')
+}
+
+// Build task: runs BuildHtml.main() which invokes the TeaVM compiler
+tasks.register('buildHtml', JavaExec) {
+    dependsOn classes
+    group = "teavm"
+    description = "Build HTML5/browser version using TeaVM"
+    mainClass = "com.shatteredpixel.shatteredpixeldungeon.html.BuildHtml"
+    classpath = sourceSets.main.runtimeClasspath
+}
