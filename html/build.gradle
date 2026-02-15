@@ -103,25 +103,31 @@ tasks.register('buildHtml', JavaExec) {
         <div id="error-overlay"></div>
         <script>
             var errorLog = [];
+            function showError(text) {
+                errorLog.push(text);
+                var el = document.getElementById('error-overlay');
+                el.style.display = 'block';
+                el.textContent = 'ERROR:\\n' + errorLog.join('\\n\\n');
+            }
             window.onerror = function(msg, src, line, col, err) {
                 var text = msg + "\\n  at " + src + ":" + line + ":" + col;
                 if (err && err.stack) text += "\\n" + err.stack;
-                errorLog.push(text);
-                var el = document.getElementById('error-overlay');
-                el.style.display = 'block';
-                el.textContent = 'ERROR:\\n' + errorLog.join('\\n\\n');
+                showError(text);
                 return false;
             };
             window.addEventListener('unhandledrejection', function(e) {
-                var text = 'Unhandled promise: ' + (e.reason ? e.reason.stack || e.reason : e);
-                errorLog.push(text);
-                var el = document.getElementById('error-overlay');
-                el.style.display = 'block';
-                el.textContent = 'ERROR:\\n' + errorLog.join('\\n\\n');
+                showError('Unhandled promise: ' + (e.reason ? e.reason.stack || e.reason : e));
             });
+            // Intercept console.error to catch Java exceptions logged via Gdx.app.error()
+            var origError = console.error;
+            console.error = function() {
+                origError.apply(console, arguments);
+                var msg = Array.prototype.slice.call(arguments).join(' ');
+                if (msg.length > 10) showError('[console.error] ' + msg);
+            };
             async function start() {
                 document.getElementById('loading').style.display = 'none';
-                main();
+                try { main(); } catch(e) { showError('main() threw: ' + (e.stack || e)); }
             }
             window.addEventListener("load", start);
         </script>

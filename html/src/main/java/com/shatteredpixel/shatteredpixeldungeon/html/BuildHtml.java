@@ -44,9 +44,10 @@ public class BuildHtml {
 		compiler.setOptimizationLevel(TeaVMOptimizationLevel.SIMPLE);
 		compiler.setObfuscated(false);
 
-		// Register packages that use Reflection.forName() for Bundlable deserialization
-		compiler.addReflectionClass("com.shatteredpixel.shatteredpixeldungeon");
-		compiler.addReflectionClass("com.watabou");
+		// Register packages that use Reflection.forName() for Bundlable deserialization.
+		// The .** glob suffix is required so TeaVM preserves all classes in these packages.
+		compiler.addReflectionClass("com.shatteredpixel.shatteredpixeldungeon.**");
+		compiler.addReflectionClass("com.watabou.**");
 
 		compiler.build(new File("build/dist"));
 	}
