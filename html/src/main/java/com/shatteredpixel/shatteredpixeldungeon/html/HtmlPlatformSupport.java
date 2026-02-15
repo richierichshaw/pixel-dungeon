@@ -82,9 +82,14 @@ public class HtmlPlatformSupport extends PlatformSupport {
 		packer = new PixmapPacker(pageSize, pageSize, Pixmap.Format.RGBA8888, 1, false);
 	}
 
-	private static Matcher asianMatcher = Pattern.compile("\\p{InHangul_Syllables}|" +
-			"\\p{InCJK_Unified_Ideographs}|\\p{InCJK_Symbols_and_Punctuation}|\\p{InHalfwidth_and_Fullwidth_Forms}|" +
-			"\\p{InHiragana}|\\p{InKatakana}").matcher("");
+	// TeaVM's regex doesn't support Java's \p{InXxx_Yyy} syntax (underscored block names),
+	// so we use explicit Unicode codepoint ranges instead.
+	// Hangul Syllables: U+AC00-U+D7A3, CJK Unified Ideographs: U+4E00-U+9FFF,
+	// CJK Symbols and Punctuation: U+3000-U+303F, Halfwidth and Fullwidth Forms: U+FF00-U+FFEF,
+	// Hiragana: U+3040-U+309F, Katakana: U+30A0-U+30FF
+	private static Matcher asianMatcher = Pattern.compile(
+			"[\\uAC00-\\uD7A3]|[\\u4E00-\\u9FFF]|[\\u3000-\\u303F]|[\\uFF00-\\uFFEF]|" +
+			"[\\u3040-\\u309F]|[\\u30A0-\\u30FF]").matcher("");
 
 	@Override
 	protected FreeTypeFontGenerator getGeneratorForString( String input ){
@@ -97,17 +102,17 @@ public class HtmlPlatformSupport extends PlatformSupport {
 
 	private Pattern regularsplitter = Pattern.compile(
 			"(?<=\n)|(?=\n)|(?<=_)|(?=_)|(?<=\\*\\*)|(?=\\*\\*)|" +
-					"(?<=\\p{InHiragana})|(?=\\p{InHiragana})|" +
-					"(?<=\\p{InKatakana})|(?=\\p{InKatakana})|" +
-					"(?<=\\p{InCJK_Unified_Ideographs})|(?=\\p{InCJK_Unified_Ideographs})|" +
-					"(?<=\\p{InCJK_Symbols_and_Punctuation})|(?=\\p{InCJK_Symbols_and_Punctuation})");
+					"(?<=[\\u3040-\\u309F])|(?=[\\u3040-\\u309F])|" +
+					"(?<=[\\u30A0-\\u30FF])|(?=[\\u30A0-\\u30FF])|" +
+					"(?<=[\\u4E00-\\u9FFF])|(?=[\\u4E00-\\u9FFF])|" +
+					"(?<=[\\u3000-\\u303F])|(?=[\\u3000-\\u303F])");
 
 	private Pattern regularsplitterMultiline = Pattern.compile(
 			"(?<= )|(?= )|(?<=\n)|(?=\n)|(?<=_)|(?=_)|(?<=\\*\\*)|(?=\\*\\*)|" +
-					"(?<=\\p{InHiragana})|(?=\\p{InHiragana})|" +
-					"(?<=\\p{InKatakana})|(?=\\p{InKatakana})|" +
-					"(?<=\\p{InCJK_Unified_Ideographs})|(?=\\p{InCJK_Unified_Ideographs})|" +
-					"(?<=\\p{InCJK_Symbols_and_Punctuation})|(?=\\p{InCJK_Symbols_and_Punctuation})");
+					"(?<=[\\u3040-\\u309F])|(?=[\\u3040-\\u309F])|" +
+					"(?<=[\\u30A0-\\u30FF])|(?=[\\u30A0-\\u30FF])|" +
+					"(?<=[\\u4E00-\\u9FFF])|(?=[\\u4E00-\\u9FFF])|" +
+					"(?<=[\\u3000-\\u303F])|(?=[\\u3000-\\u303F])");
 
 	@Override
 	public String[] splitforTextBlock(String text, boolean multiline) {

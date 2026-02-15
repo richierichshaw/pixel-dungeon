@@ -48,4 +48,86 @@ tasks.register('buildHtml', JavaExec) {
     description = "Build HTML5/browser version using TeaVM"
     mainClass = "com.shatteredpixel.shatteredpixeldungeon.html.BuildHtml"
     classpath = sourceSets.main.runtimeClasspath
+
+    // Replace generated index.html with our custom version that has error reporting
+    doLast {
+        def indexFile = file("build/dist/webapp/index.html")
+        indexFile.text = '''\
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Pixel Dungeon</title>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+        <style>
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background: #000;
+                height: 100vh;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+            }
+            #canvas { border: none; }
+            #loading {
+                position: absolute;
+                color: #aaa;
+                font-family: monospace;
+                font-size: 14px;
+                text-align: center;
+            }
+            #error-overlay {
+                display: none;
+                position: absolute;
+                top: 10px; left: 10px; right: 10px;
+                background: rgba(180,0,0,0.9);
+                color: #fff;
+                font-family: monospace;
+                font-size: 12px;
+                padding: 15px;
+                border-radius: 5px;
+                max-height: 50vh;
+                overflow-y: auto;
+                z-index: 1000;
+                white-space: pre-wrap;
+                word-break: break-all;
+            }
+        </style>
+    </head>
+    <body oncontextmenu="return false">
+        <div id="loading">Loading Pixel Dungeon...</div>
+        <div>
+            <canvas id="canvas"></canvas>
+        </div>
+        <div id="error-overlay"></div>
+        <script>
+            var errorLog = [];
+            window.onerror = function(msg, src, line, col, err) {
+                var text = msg + "\\n  at " + src + ":" + line + ":" + col;
+                if (err && err.stack) text += "\\n" + err.stack;
+                errorLog.push(text);
+                var el = document.getElementById('error-overlay');
+                el.style.display = 'block';
+                el.textContent = 'ERROR:\\n' + errorLog.join('\\n\\n');
+                return false;
+            };
+            window.addEventListener('unhandledrejection', function(e) {
+                var text = 'Unhandled promise: ' + (e.reason ? e.reason.stack || e.reason : e);
+                errorLog.push(text);
+                var el = document.getElementById('error-overlay');
+                el.style.display = 'block';
+                el.textContent = 'ERROR:\\n' + errorLog.join('\\n\\n');
+            });
+            async function start() {
+                document.getElementById('loading').style.display = 'none';
+                main();
+            }
+            window.addEventListener("load", start);
+        </script>
+        <script type="text/javascript" charset="utf-8" src="app.js"></script>
+    </body>
+</html>
+'''
+    }
 }
