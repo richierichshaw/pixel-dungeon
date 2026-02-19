@@ -27,6 +27,7 @@ import com.watabou.input.GameAction;
 import com.watabou.input.KeyBindings;
 import com.watabou.input.KeyEvent;
 import com.watabou.utils.Bundle;
+import com.watabou.utils.DeviceCompat;
 import com.watabou.utils.FileUtils;
 
 import java.io.IOException;
@@ -204,6 +205,10 @@ public class SPDAction extends GameAction {
 		}
 
 		try {
+			// Browser: skip file I/O for keybinds (IndexedDB may block the JS event loop).
+			// Just use defaults on browser — no custom keybindings needed.
+			if (DeviceCompat.isBrowser()) throw new Exception("skip file I/O on browser");
+
 			Bundle b = FileUtils.bundleFromFile(BINDINGS_FILE);
 
 			Bundle firstKeys = b.getBundle("first_keys");

@@ -159,15 +159,25 @@ public class Game implements ApplicationListener {
 			if (DeviceCompat.isAndroid()) return;
 		}
 
-		NoosaScript.get().resetCamera();
-		NoosaScriptNoLighting.get().resetCamera();
-		Gdx.gl.glDisable(Gdx.gl.GL_SCISSOR_TEST);
-		Gdx.gl.glClear(Gdx.gl.GL_COLOR_BUFFER_BIT);
-		draw();
+		try {
+			NoosaScript.get().resetCamera();
+			NoosaScriptNoLighting.get().resetCamera();
+			Gdx.gl.glDisable(Gdx.gl.GL_SCISSOR_TEST);
+			Gdx.gl.glClear(Gdx.gl.GL_COLOR_BUFFER_BIT);
+			draw();
 
-		Gdx.gl.glDisable( Gdx.gl.GL_SCISSOR_TEST );
-		
-		step();
+			Gdx.gl.glDisable(Gdx.gl.GL_SCISSOR_TEST);
+
+			step();
+		} catch (Throwable t) {
+			// On browser, rethrow so JS error handler can display it.
+			// On desktop/mobile, just log to avoid crashing the render loop.
+			if (DeviceCompat.isBrowser()) {
+				throw new RuntimeException("Render error", t);
+			} else {
+				reportException(t);
+			}
+		}
 	}
 	
 	@Override

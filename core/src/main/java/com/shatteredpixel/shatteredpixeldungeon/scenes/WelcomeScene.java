@@ -47,6 +47,7 @@ import com.watabou.noosa.ColorBlock;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.audio.Music;
+import com.watabou.utils.DeviceCompat;
 import com.watabou.utils.FileUtils;
 import com.watabou.utils.RectF;
 
@@ -65,7 +66,7 @@ public class WelcomeScene extends PixelScene {
 
 		final int previousVersion = SPDSettings.version();
 
-		if (!triedCleaningTemp && FileUtils.cleanTempFiles()){
+		if (!DeviceCompat.isBrowser() && !triedCleaningTemp && FileUtils.cleanTempFiles()){
 			add(new WndHardNotification(Icons.get(Icons.WARNING),
 					Messages.get(WndError.class, "title"),
 					Messages.get(this, "save_warning"),
