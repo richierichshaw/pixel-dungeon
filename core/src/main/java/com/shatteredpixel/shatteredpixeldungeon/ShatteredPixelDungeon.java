@@ -58,16 +58,20 @@ public class ShatteredPixelDungeon extends Game {
 	public void create() {
 		super.create();
 
+		if (DeviceCompat.isBrowser()) com.badlogic.gdx.Gdx.app.log("BROWSER", "SPD.create(): loadBindings...");
 		updateSystemUI();
 		SPDAction.loadBindings();
-		
+
+		if (DeviceCompat.isBrowser()) com.badlogic.gdx.Gdx.app.log("BROWSER", "SPD.create(): configuring audio...");
 		Music.INSTANCE.enable( SPDSettings.music() );
 		Music.INSTANCE.volume( SPDSettings.musicVol()*SPDSettings.musicVol()/100f );
 		Sample.INSTANCE.enable( SPDSettings.soundFx() );
 		Sample.INSTANCE.volume( SPDSettings.SFXVol()*SPDSettings.SFXVol()/100f );
 
+		if (DeviceCompat.isBrowser()) com.badlogic.gdx.Gdx.app.log("BROWSER", "SPD.create(): loading sounds...");
 		Sample.INSTANCE.load( Assets.Sounds.all );
-		
+
+		if (DeviceCompat.isBrowser()) com.badlogic.gdx.Gdx.app.log("BROWSER", "SPD.create() complete.");
 	}
 
 	@Override

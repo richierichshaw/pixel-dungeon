@@ -85,41 +85,60 @@ public class Game implements ApplicationListener {
 	
 	@Override
 	public void create() {
-		density = Gdx.graphics.getDensity();
-		if (density == Float.POSITIVE_INFINITY){
-			density = 100f / 160f; //assume 100PPI if density can't be found
-		} else if (DeviceCompat.isDesktop()) {
-			int dispWidth = Gdx.graphics.getDisplayMode().width;
-			int dispHeight = Gdx.graphics.getDisplayMode().height;
-			float reportedWidth = dispWidth / Gdx.graphics.getPpiX();
-			float reportedHeight = dispHeight / Gdx.graphics.getPpiY();
+		try {
+			if (DeviceCompat.isBrowser()) Gdx.app.log("BROWSER", "Game.create() starting...");
 
-			//this exists because Steam deck reports its display size as 4"x6.3" for some reason
-			// as if in portrait, instead of 6.3"x4". This results in incorrect PPI measurements.
-			// So we check that the orientation of the resolution and the display dimensions match.
-			// If they don't, re-calculate density assuming reported dimensions are flipped.
-			if (dispWidth > dispHeight != reportedWidth > reportedHeight){
-				float realPpiX = dispWidth / reportedHeight;
-				density = realPpiX / 160f;
+			density = Gdx.graphics.getDensity();
+			if (density == Float.POSITIVE_INFINITY){
+				density = 100f / 160f; //assume 100PPI if density can't be found
+			} else if (DeviceCompat.isDesktop()) {
+				int dispWidth = Gdx.graphics.getDisplayMode().width;
+				int dispHeight = Gdx.graphics.getDisplayMode().height;
+				float reportedWidth = dispWidth / Gdx.graphics.getPpiX();
+				float reportedHeight = dispHeight / Gdx.graphics.getPpiY();
+
+				//this exists because Steam deck reports its display size as 4"x6.3" for some reason
+				// as if in portrait, instead of 6.3"x4". This results in incorrect PPI measurements.
+				// So we check that the orientation of the resolution and the display dimensions match.
+				// If they don't, re-calculate density assuming reported dimensions are flipped.
+				if (dispWidth > dispHeight != reportedWidth > reportedHeight){
+					float realPpiX = dispWidth / reportedHeight;
+					density = realPpiX / 160f;
+				}
 			}
-		}
 
-		inputHandler = new InputHandler( Gdx.input );
-		if (ControllerHandler.controllersSupported()){
-			Controllers.addListener(new ControllerHandler());
-		}
+			if (DeviceCompat.isBrowser()) Gdx.app.log("BROWSER", "density=" + density + ", setting up input...");
 
-		//refreshes texture and vertex data stored on the gpu
-		versionContextRef = Gdx.graphics.getGLVersion();
-		Blending.useDefault();
-		TextureCache.reload();
-		Vertexbuffer.reload();
+			inputHandler = new InputHandler( Gdx.input );
+			if (ControllerHandler.controllersSupported()){
+				Controllers.addListener(new ControllerHandler());
+			}
+
+			if (DeviceCompat.isBrowser()) Gdx.app.log("BROWSER", "input ready, initializing GL...");
+
+			//refreshes texture and vertex data stored on the gpu
+			versionContextRef = Gdx.graphics.getGLVersion();
+			Blending.useDefault();
+			TextureCache.reload();
+			Vertexbuffer.reload();
+
+			if (DeviceCompat.isBrowser()) Gdx.app.log("BROWSER", "Game.create() complete.");
+		} catch (Throwable t) {
+			if (DeviceCompat.isBrowser()) {
+				StringWriter sw = new StringWriter();
+				PrintWriter pw = new PrintWriter(sw);
+				t.printStackTrace(pw);
+				Gdx.app.error("BROWSER", "Game.create() FAILED: " + sw.toString());
+			}
+			throw t instanceof RuntimeException ? (RuntimeException) t : new RuntimeException(t);
+		}
 	}
 
 	private GLVersion versionContextRef;
 	
 	@Override
 	public void resize(int width, int height) {
+		if (DeviceCompat.isBrowser()) Gdx.app.log("BROWSER", "Game.resize(" + width + ", " + height + ")");
 		if (width == 0 || height == 0){
 			return;
 		}
@@ -145,6 +164,7 @@ public class Game implements ApplicationListener {
 	//justResumed is a bit of a hack to improve start time metrics on Android,
 	// as texture refreshing leads to slow warm starts. TODO would be nice to fix this properly
 	private boolean justResumed = true;
+	private int renderFrameCount = 0;
 
 	@Override
 	public void render() {
@@ -160,6 +180,11 @@ public class Game implements ApplicationListener {
 		}
 
 		try {
+			renderFrameCount++;
+			if (DeviceCompat.isBrowser() && renderFrameCount <= 3) {
+				Gdx.app.log("BROWSER", "render() frame #" + renderFrameCount + ", scene=" + (scene != null ? scene.getClass().getName() : "null") + ", requestedReset=" + requestedReset);
+			}
+
 			NoosaScript.get().resetCamera();
 			NoosaScriptNoLighting.get().resetCamera();
 			Gdx.gl.glDisable(Gdx.gl.GL_SCISSOR_TEST);
@@ -170,10 +195,14 @@ public class Game implements ApplicationListener {
 
 			step();
 		} catch (Throwable t) {
-			// On browser, rethrow so JS error handler can display it.
-			// On desktop/mobile, just log to avoid crashing the render loop.
+			// On browser, log the error explicitly (gdx-teavm swallows exceptions from step()),
+			// then rethrow so the error also propagates
 			if (DeviceCompat.isBrowser()) {
-				throw new RuntimeException("Render error", t);
+				StringWriter sw = new StringWriter();
+				PrintWriter pw = new PrintWriter(sw);
+				t.printStackTrace(pw);
+				Gdx.app.error("BROWSER", "render() EXCEPTION at frame #" + renderFrameCount + ": " + sw.toString());
+				throw t instanceof RuntimeException ? (RuntimeException) t : new RuntimeException("Render error", t);
 			} else {
 				reportException(t);
 			}
@@ -238,17 +267,23 @@ public class Game implements ApplicationListener {
 	}
 	
 	protected void step() {
-		
+
 		if (requestedReset) {
 			requestedReset = false;
-			
+
+			if (DeviceCompat.isBrowser()) Gdx.app.log("BROWSER", "Creating scene: " + sceneClass.getName());
+
 			requestedScene = Reflection.newInstance(sceneClass);
 			if (requestedScene != null){
+				if (DeviceCompat.isBrowser()) Gdx.app.log("BROWSER", "Scene instantiated, calling switchScene()...");
 				switchScene();
+				if (DeviceCompat.isBrowser()) Gdx.app.log("BROWSER", "switchScene() complete. Scene is live.");
+			} else {
+				if (DeviceCompat.isBrowser()) Gdx.app.error("BROWSER", "FAILED to create scene via reflection: " + sceneClass.getName() + ". Reflection.newInstance returned null!");
 			}
 
 		}
-		
+
 		update();
 	}
 	
