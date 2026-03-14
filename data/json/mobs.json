@@ -76,9 +76,11 @@
     {
       "name": "Swarm",
       "region": "Sewers/Prison",
-      "HP": 80, "defenseSkill": 5, "EXP": 0, "maxLvl": 10,
+      "HP": 80, "defenseSkill": 5, "EXP": 1, "maxLvl": 10,
       "damage": "1-4", "attackSkill": 12, "DR": 0,
-      "special": "Splits into 2 smaller swarms when hit (each with half HP). High total HP"
+      "flying": true,
+      "special": "Splits when HP >= damage+2: clone gets (HP-damage)/2 HP. Clone inherits Burning/Poison. Flying",
+      "loot": "PotionOfHealing", "loot_chance": "1/(5*(generation+1)) = 20% gen0, 10% gen1..."
     },
     {
       "name": "Skeleton",
@@ -141,8 +143,8 @@
       "region": "Caves",
       "HP": 50, "defenseSkill": 14, "EXP": 9, "maxLvl": 16,
       "damage": "12-16", "attackSkill": 20, "DR": 6,
-      "loot": "MysteryMeat", "loot_chance": 0.167,
-      "special": "Applies Poison on hit. Can web tiles to root hero"
+      "loot": "MysteryMeat", "loot_chance": 0.125,
+      "special": "50% Poison (7-9 * durationFactor turns) on hit, then flees. Leaves Web blobs (5-7 strength) while fleeing. Resists Poison. Immune to Roots"
     },
     {
       "name": "Elemental",
@@ -190,7 +192,7 @@
       "HP": 80, "defenseSkill": 25, "EXP": 12, "maxLvl": 25,
       "damage": "15-25", "attackSkill": 40, "DR": 10,
       "loot": "ScrollOfLullaby", "loot_chance": 0.05,
-      "special": "Teleports randomly. Charms hero on hit. Heals from charm damage. Flying"
+      "special": "1/3 chance Charm (3-7 * durationFactor turns) on hit. Blinks to enemy if distance > 2 (BLINK_DELAY=5 turns cooldown). Resists Leech. Immune to Sleep"
     },
     {
       "name": "Eye",
@@ -251,8 +253,9 @@
     {
       "name": "CursePersonification",
       "HP": "10 + depth*3", "defenseSkill": "10 + depth", "EXP": 3, "maxLvl": 5,
-      "damage": "3-5", "DR": 1,
-      "special": "Spawned by curse removal. Passes through walls"
+      "damage": "3-5", "attackSkill": "10 + depth", "DR": 1,
+      "speed": 0.5,
+      "special": "Half speed. Flying. Pushes enemy 1 tile on attack. Regenerates 1 HP/turn. Spawns Ghost NPC on death. Immune to Death, Terror, Paralysis, Roots"
     }
   ],
   "bosses": [
@@ -290,7 +293,9 @@
       "floor": 20,
       "HP": 300, "defenseSkill": 25, "EXP": 40,
       "damage": "20-38", "attackSkill": 32, "DR": 14,
-      "mechanics": "Summons Undead minions. Gains armor from undead sacrifices",
+      "immunities": ["Paralysis", "Vertigo"],
+      "resistances": ["ToxicGas", "Death", "PsionicBlast", "WandOfDisintegration"],
+      "mechanics": "Summons Undead. Max army = 1 + 5*(HT-HP)/HT (up to 6 at low HP). Walks to pedestals to summon",
       "minion": {
         "name": "Undead",
         "HP": 28, "defenseSkill": 15, "EXP": 0,
@@ -302,8 +307,9 @@
       "name": "Yog-Dzewa",
       "floor": 25,
       "HP": 300, "defenseSkill": 0, "EXP": 50,
-      "damage": "None (uses Fists)", "attackSkill": 0,
-      "mechanics": "Stationary. Spawns RottingFist and BurningFist. Spawns Larvae. Cannot be directly killed until Fists are defeated",
+      "damage": "None (passive, never attacks)", "attackSkill": 0,
+      "immunities": ["Death", "Terror", "Amok", "Charm", "Sleep", "Burning", "ToxicGas", "PsionicBlast"],
+      "mechanics": "Stationary. Damage halved per living fist (dmg >> fistsCount). Spawns Larva on defenseProc. Spawns RottingFist + BurningFist at start. Drops SkeletonKey",
       "fists": {
         "RottingFist": {
           "HP": 300, "defenseSkill": 25, "EXP": 0,
