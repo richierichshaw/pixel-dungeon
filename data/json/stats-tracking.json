@@ -1,0 +1,204 @@
+{
+  "meta": {
+    "game": "Pixel Dungeon",
+    "version": "1.9.1",
+    "source": "https://github.com/watabou/pixel-dungeon",
+    "generated": "2026-03-14"
+  },
+  "buffs": {
+    "damage_over_time": {
+      "Burning": {
+        "duration": 8.0,
+        "damage": "Random.Int(1, 5) per tick (1-4 damage)",
+        "tick_rate": "TICK",
+        "end_condition": "left <= 0 OR probability based on HP ratio OR standing in water (not flying)",
+        "special": "Burns Scrolls in inventory; converts MysteryMeat to ChargrilledMeat; grants Light buff; spreads Fire on flammable tiles",
+        "hero_doom": true
+      },
+      "Bleeding": {
+        "duration": "Variable (decays geometrically)",
+        "damage": "level per tick; level = Random.Int(level/2, level) each tick",
+        "tick_rate": "TICK",
+        "end_condition": "level reaches 0",
+        "hero_doom": true
+      },
+      "Poison": {
+        "duration": "Variable, set externally",
+        "damage": "(int)(left / 3) + 1 per tick (decreases as duration ticks down)",
+        "tick_rate": "TICK",
+        "duration_factor": "Affected by RingOfElements.Resistance.durationFactor()",
+        "hero_doom": true
+      },
+      "Ooze": {
+        "duration": "Indefinite (until stepping on water)",
+        "damage": "1 per tick",
+        "tick_rate": "TICK",
+        "end_condition": "Target steps on water tile",
+        "hero_doom": true
+      },
+      "Hunger": {
+        "constants": {
+          "STEP": 10.0,
+          "HUNGRY": 260.0,
+          "STARVING": 360.0
+        },
+        "accumulation": "level + STEP - satiety_bonus per tick",
+        "starvation_damage": "1 HP per tick, 30% chance (Random.Float < 0.3), only if HP > 1 or not paralysed",
+        "rogue_multiplier": "STEP * 1.2 = 12",
+        "shadows_multiplier": "* 1.5",
+        "hero_doom": true
+      }
+    },
+    "crowd_control": {
+      "Paralysis": {
+        "type": "FlavourBuff",
+        "duration": 10.0,
+        "effect": "target.paralysed = true",
+        "break_chance": "Random.Int(dmg) >= Random.Int(HP)"
+      },
+      "Frost": {
+        "type": "FlavourBuff",
+        "duration": 5.0,
+        "effect": "target.paralysed = true; removes Burning; converts MysteryMeat to FrozenCarpaccio"
+      },
+      "Roots": {
+        "type": "FlavourBuff",
+        "duration": "Externally set",
+        "effect": "target.rooted = true (only if not flying)"
+      },
+      "Slow": {
+        "type": "FlavourBuff",
+        "duration": 10.0,
+        "effect": "Actions take 2x as long (timeScale * 0.5)"
+      },
+      "Cripple": {
+        "type": "FlavourBuff",
+        "duration": 10.0,
+        "effect": "Movement speed halved (baseSpeed * 0.5)"
+      },
+      "Sleep": {
+        "type": "FlavourBuff",
+        "sleep_walk_speed": 1.5,
+        "effect": "Target unconscious"
+      },
+      "Vertigo": {
+        "type": "FlavourBuff",
+        "duration": 10.0,
+        "effect": "Random movement direction from 8 neighbors"
+      },
+      "Amok": {
+        "type": "FlavourBuff",
+        "duration": "Externally set",
+        "effect": "Target attacks random adjacent characters"
+      },
+      "Blindness": {
+        "type": "FlavourBuff",
+        "duration": "Externally set",
+        "effect": "Cannot see. On detach: Dungeon.observe()"
+      },
+      "Charm": {
+        "type": "FlavourBuff",
+        "duration": "Externally set",
+        "effect": "Mind control, stores charmer ID"
+      },
+      "Terror": {
+        "type": "FlavourBuff",
+        "duration": 10.0,
+        "effect": "Target flees from source. Recovery possible if cooldown < DURATION"
+      },
+      "Weakness": {
+        "type": "FlavourBuff",
+        "duration": 40.0,
+        "effect": "STR reduced by 2. Discharges equipped items"
+      },
+      "Rage": {
+        "type": "FlavourBuff",
+        "duration": "Externally set",
+        "effect": "Increased aggression"
+      }
+    },
+    "positive_buffs": {
+      "Regeneration": {
+        "heal": "1 HP per delay ticks",
+        "base_delay": 10,
+        "formula": "delay = 10 / 1.2^(RingOfMending bonus)",
+        "condition": "HP < HT and not starving"
+      },
+      "Barkskin": {
+        "duration": "level turns (decrements by 1 per tick)",
+        "effect": "Provides armor equal to current level value"
+      },
+      "Fury": {
+        "duration": "Indefinite while HP <= HT * 0.4",
+        "threshold": 0.4,
+        "effect": "Flag for 1.5x damage multiplier (Berserker subclass)"
+      },
+      "Combo": {
+        "duration": "1.1 ticks per hit (< 3 hits); 1.41 - count/10 (>= 3 hits)",
+        "bonus_damage": "(int)(damage * (count - 2) / 5) when count >= 3",
+        "effect": "Gladiator subclass consecutive hit bonus"
+      },
+      "Invisibility": {
+        "duration": 15.0,
+        "effect": "target.invisible++; dispelled when visible enemies detected"
+      },
+      "Shadows": {
+        "extends": "Invisibility",
+        "duration": "Variable, prolong sets left = 2",
+        "tick_rate": "TICK * 2",
+        "end_condition": "left reaches 0 or visible enemies > 0"
+      },
+      "Light": {
+        "duration": 250.0,
+        "distance": 4,
+        "effect": "Extends view distance"
+      },
+      "MindVision": {
+        "duration": 20.0,
+        "distance": 2,
+        "effect": "Reveals all mobs on the level"
+      },
+      "Awareness": {
+        "duration": 2.0,
+        "effect": "Enhanced perception"
+      },
+      "Levitation": {
+        "duration": 20.0,
+        "effect": "target.flying = true; removes Roots on attach"
+      },
+      "Speed": {
+        "duration": 10.0,
+        "effect": "Actions take half as long (timeScale * 2.0)"
+      },
+      "GasesImmunity": {
+        "duration": 5.0,
+        "immunities": ["Paralysis", "ToxicGas", "Vertigo"]
+      },
+      "SnipersMark": {
+        "duration": "Externally set (attackDelay * 1.1)",
+        "effect": "Marks target for Sniper armor penetration"
+      }
+    }
+  },
+  "combat_mechanics": {
+    "hit_formula": {
+      "physical": "Random.Float(attackSkill) >= Random.Float(defenseSkill)",
+      "magical": "Random.Float(attackSkill) * 2 >= Random.Float(defenseSkill)",
+      "description": "Magical attacks have 2x accuracy multiplier"
+    },
+    "damage_reduction": {
+      "dr_roll": "Random.IntRange(0, enemy.dr())",
+      "effective_damage": "Math.max(damageRoll - dr_roll, 0)",
+      "sniper_bypass": "Sniper with ranged weapon sets dr = 0"
+    },
+    "camera_shake": {
+      "threshold": "damage > enemy.HT / 4",
+      "intensity": "GameMath.gate(1, effectiveDamage / (enemy.HT/4), 5)",
+      "duration": 0.3
+    },
+    "resistance_mechanic": {
+      "immune": "damage = 0",
+      "resistant": "damage = Random.IntRange(0, damage)"
+    }
+  }
+}

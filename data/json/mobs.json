@@ -1,0 +1,327 @@
+{
+  "meta": {
+    "game": "Pixel Dungeon",
+    "version": "1.9.1",
+    "source": "https://github.com/watabou/pixel-dungeon",
+    "generated": "2026-03-14"
+  },
+  "rare_variant_chance": "1 in 30 (Random.Int(30) == 0)",
+  "rare_variants": {
+    "Rat": "Albino",
+    "Thief": "Bandit",
+    "Brute": "Shielded",
+    "Monk": "Senior",
+    "Scorpio": "Acidic"
+  },
+  "spawn_table": {
+    "1": {"mobs": ["Rat"], "weights": [1]},
+    "2": {"mobs": ["Rat", "Gnoll"], "weights": [1, 1]},
+    "3": {"mobs": ["Rat", "Gnoll", "Crab", "Swarm"], "weights": [1, 2, 1, 0.02]},
+    "4": {"mobs": ["Rat", "Gnoll", "Crab", "Swarm", "Skeleton", "Thief"], "weights": [1, 2, 3, 0.02, 0.01, 0.01]},
+    "5": {"mobs": ["Goo"], "weights": [1], "boss": true},
+    "6": {"mobs": ["Skeleton", "Thief", "Swarm", "Shaman"], "weights": [4, 2, 1, 0.2]},
+    "7": {"mobs": ["Skeleton", "Shaman", "Thief", "Swarm"], "weights": [3, 1, 1, 1]},
+    "8": {"mobs": ["Skeleton", "Shaman", "Gnoll", "Thief", "Swarm", "Bat"], "weights": [3, 2, 1, 1, 1, 0.02]},
+    "9": {"mobs": ["Skeleton", "Shaman", "Thief", "Swarm", "Bat", "Brute"], "weights": [3, 3, 1, 1, 0.02, 0.01]},
+    "10": {"mobs": ["Tengu"], "weights": [1], "boss": true},
+    "11": {"mobs": ["Bat", "Brute"], "weights": [1, 0.2]},
+    "12": {"mobs": ["Bat", "Brute", "Spinner"], "weights": [1, 1, 0.2]},
+    "13": {"mobs": ["Bat", "Brute", "Shaman", "Spinner", "Elemental"], "weights": [1, 3, 1, 1, 0.02]},
+    "14": {"mobs": ["Bat", "Brute", "Shaman", "Spinner", "Elemental", "Monk"], "weights": [1, 3, 1, 4, 0.02, 0.01]},
+    "15": {"mobs": ["DM300"], "weights": [1], "boss": true},
+    "16": {"mobs": ["Elemental", "Warlock", "Monk"], "weights": [1, 1, 0.2]},
+    "17": {"mobs": ["Elemental", "Monk", "Warlock"], "weights": [1, 1, 1]},
+    "18": {"mobs": ["Elemental", "Monk", "Golem", "Warlock"], "weights": [1, 2, 1, 1]},
+    "19": {"mobs": ["Elemental", "Monk", "Golem", "Warlock", "Succubus"], "weights": [1, 2, 3, 1, 0.02]},
+    "20": {"mobs": ["King"], "weights": [1], "boss": true},
+    "22": {"mobs": ["Succubus", "Eye"], "weights": [1, 1]},
+    "23": {"mobs": ["Succubus", "Eye", "Scorpio"], "weights": [1, 2, 1]},
+    "24": {"mobs": ["Succubus", "Eye", "Scorpio"], "weights": [1, 2, 3]},
+    "25": {"mobs": ["Yog"], "weights": [1], "boss": true},
+    "default": {"mobs": ["Eye"], "weights": [1]}
+  },
+  "regular_mobs": [
+    {
+      "name": "Rat",
+      "region": "Sewers",
+      "HP": 8, "defenseSkill": 3, "EXP": 1, "maxLvl": 5,
+      "damage": "1-5", "attackSkill": 8, "DR": 1,
+      "speed": 1.0, "loot": null, "loot_chance": null,
+      "special": null
+    },
+    {
+      "name": "Albino",
+      "region": "Sewers (rare Rat variant)",
+      "HP": 15, "defenseSkill": 3, "EXP": 1, "maxLvl": 5,
+      "damage": "1-5 (inherits Rat)", "attackSkill": 8, "DR": 1,
+      "special": "Higher HP than normal Rat. Causes Bleeding on hit"
+    },
+    {
+      "name": "Gnoll",
+      "region": "Sewers",
+      "HP": 12, "defenseSkill": 4, "EXP": 2, "maxLvl": 8,
+      "damage": "2-5", "attackSkill": 11, "DR": 2,
+      "loot": "Gold", "loot_chance": 0.5,
+      "special": null
+    },
+    {
+      "name": "Crab",
+      "region": "Sewers",
+      "HP": 15, "defenseSkill": 5, "EXP": 3, "maxLvl": 9,
+      "damage": "3-6", "attackSkill": 12, "DR": 4,
+      "loot": "MysteryMeat", "loot_chance": 0.167,
+      "special": "High armor for its level"
+    },
+    {
+      "name": "Swarm",
+      "region": "Sewers/Prison",
+      "HP": 80, "defenseSkill": 5, "EXP": 0, "maxLvl": 10,
+      "damage": "1-4", "attackSkill": 12, "DR": 0,
+      "special": "Splits into 2 smaller swarms when hit (each with half HP). High total HP"
+    },
+    {
+      "name": "Skeleton",
+      "region": "Prison",
+      "HP": 25, "defenseSkill": 9, "EXP": 5, "maxLvl": 10,
+      "damage": "3-8", "attackSkill": 12, "DR": 5,
+      "loot": "Random weapon (level capped)", "loot_chance": 0.2,
+      "special": "Explodes on death dealing damageRoll to adjacent chars (with half DR)"
+    },
+    {
+      "name": "Thief",
+      "region": "Prison",
+      "HP": 20, "defenseSkill": 12, "EXP": 5, "maxLvl": 10,
+      "damage": "1-7", "attackSkill": 12, "DR": 3,
+      "loot": "RingOfHaggler", "loot_chance": 0.01,
+      "special": "Steals an item from hero on hit, then flees"
+    },
+    {
+      "name": "Bandit",
+      "region": "Prison (rare Thief variant)",
+      "HP": 20, "defenseSkill": 12, "EXP": 5, "maxLvl": 10,
+      "damage": "1-7 (inherits Thief)", "attackSkill": 12, "DR": 3,
+      "special": "Steals and also applies Blindness on hit"
+    },
+    {
+      "name": "Shaman",
+      "region": "Prison/Caves",
+      "HP": 18, "defenseSkill": 8, "EXP": 6, "maxLvl": 14,
+      "damage": "2-6", "attackSkill": 11, "DR": 4,
+      "loot": "Random scroll", "loot_chance": 0.33,
+      "special": "Ranged lightning attack that ignores armor. Applies Weakness debuff"
+    },
+    {
+      "name": "Bat",
+      "region": "Caves",
+      "HP": 30, "defenseSkill": 15, "EXP": 7, "maxLvl": 15,
+      "damage": "6-12", "attackSkill": 16, "DR": 4,
+      "loot": "PotionOfHealing", "loot_chance": 0.167,
+      "special": "Vampiric: heals for damage dealt on hit. Flying"
+    },
+    {
+      "name": "Brute",
+      "region": "Caves",
+      "HP": 40, "defenseSkill": 15, "EXP": 8, "maxLvl": 15,
+      "damage": "8-18 (10-40 enraged)", "attackSkill": 20, "DR": 8,
+      "loot": "Gold", "loot_chance": 0.5,
+      "special": "Enrages at low HP, dealing much more damage"
+    },
+    {
+      "name": "Shielded",
+      "region": "Caves (rare Brute variant)",
+      "HP": 40, "defenseSkill": 20, "EXP": 8, "maxLvl": 15,
+      "damage": "8-18 (inherits Brute)", "attackSkill": 20, "DR": 10,
+      "special": "Higher defense skill and DR than normal Brute"
+    },
+    {
+      "name": "Spinner",
+      "region": "Caves",
+      "HP": 50, "defenseSkill": 14, "EXP": 9, "maxLvl": 16,
+      "damage": "12-16", "attackSkill": 20, "DR": 6,
+      "loot": "MysteryMeat", "loot_chance": 0.167,
+      "special": "Applies Poison on hit. Can web tiles to root hero"
+    },
+    {
+      "name": "Elemental",
+      "region": "Dwarf City",
+      "HP": 65, "defenseSkill": 20, "EXP": 10, "maxLvl": 20,
+      "damage": "16-20", "attackSkill": 25, "DR": 5,
+      "loot": "PotionOfLiquidFlame", "loot_chance": 0.1,
+      "special": "Immune to fire/Burning. Frost deals massive damage (1 to 2/3 HT). Ranged attack"
+    },
+    {
+      "name": "Warlock",
+      "region": "Dwarf City",
+      "HP": 70, "defenseSkill": 18, "EXP": 11, "maxLvl": 21,
+      "damage": "12-20", "attackSkill": 25, "DR": 8,
+      "loot": "Random potion", "loot_chance": 0.83,
+      "special": "Ranged shadow bolt attack. Applies Weakness debuff"
+    },
+    {
+      "name": "Monk",
+      "region": "Dwarf City",
+      "HP": 70, "defenseSkill": 30, "EXP": 11, "maxLvl": 21,
+      "damage": "12-16", "attackSkill": 30, "DR": 2,
+      "loot": "Food", "loot_chance": 0.083,
+      "special": "Very high evasion and accuracy, low DR. Can disarm hero (knock weapon away)"
+    },
+    {
+      "name": "Senior",
+      "region": "Dwarf City (rare Monk variant)",
+      "HP": 70, "defenseSkill": 30, "EXP": 11, "maxLvl": 21,
+      "damage": "12-20", "attackSkill": 30, "DR": 2,
+      "special": "Higher damage than normal Monk. Grants 2x speed buff on hit"
+    },
+    {
+      "name": "Golem",
+      "region": "Dwarf City",
+      "HP": 85, "defenseSkill": 18, "EXP": 12, "maxLvl": 22,
+      "damage": "20-40", "attackSkill": 28, "DR": 12,
+      "special": "Very high HP, damage, and DR. Slow. Immune to Amok and Terror"
+    },
+    {
+      "name": "Succubus",
+      "region": "Demon Halls",
+      "HP": 80, "defenseSkill": 25, "EXP": 12, "maxLvl": 25,
+      "damage": "15-25", "attackSkill": 40, "DR": 10,
+      "loot": "ScrollOfLullaby", "loot_chance": 0.05,
+      "special": "Teleports randomly. Charms hero on hit. Heals from charm damage. Flying"
+    },
+    {
+      "name": "Eye",
+      "region": "Demon Halls",
+      "HP": 100, "defenseSkill": 20, "EXP": 13, "maxLvl": 25,
+      "damage": "Death gaze: 14-20", "attackSkill": 30, "DR": 10,
+      "loot": "Dewdrop", "loot_chance": 0.5,
+      "special": "Death gaze: ranged beam attack dealing 14-20 damage (magical hit). Hits all in line. Flying"
+    },
+    {
+      "name": "Scorpio",
+      "region": "Demon Halls",
+      "HP": 95, "defenseSkill": 24, "EXP": 14, "maxLvl": 25,
+      "damage": "20-32", "attackSkill": 36, "DR": 16,
+      "loot": "PotionOfHealing", "loot_chance": 0.167,
+      "special": "Ranged attack. Applies Cripple on hit. Retreats when hero is adjacent"
+    },
+    {
+      "name": "Acidic",
+      "region": "Demon Halls (rare Scorpio variant)",
+      "HP": 95, "defenseSkill": 24, "EXP": 14, "maxLvl": 25,
+      "damage": "20-32 (inherits Scorpio)", "attackSkill": 36, "DR": 16,
+      "special": "When damaged by hero, applies Ooze to attacker (1 damage/turn until standing on water)"
+    }
+  ],
+  "special_mobs": [
+    {
+      "name": "FetidRat",
+      "HP": 15, "defenseSkill": 5, "EXP": 3, "maxLvl": 5,
+      "damage": "2-6", "attackSkill": 12, "DR": 2,
+      "special": "Sad Ghost quest target. Emits stench (ToxicGas)"
+    },
+    {
+      "name": "Wraith",
+      "HP": 1, "defenseSkill": "attackSkill * 5", "EXP": 0,
+      "damage": "1 to 3+level", "attackSkill": "level/2 + 1 (based on dungeon depth)",
+      "special": "Spawns from disturbed graves/tombstones. Passes through walls. Extremely high evasion, but 1 HP"
+    },
+    {
+      "name": "Piranha",
+      "HP": "10 + depth*5", "defenseSkill": "10 + depth*2", "EXP": 0,
+      "damage": "depth to 4+depth*2", "attackSkill": "20 + depth*2",
+      "special": "Water-only mob. Cannot leave water tiles. Scales with dungeon depth. Killing tracked in Statistics.piranhasKilled"
+    },
+    {
+      "name": "Mimic",
+      "HP": "(3+level)*4", "defenseSkill": "attackSkill/2", "EXP": "2 + 2*(level-1)/5",
+      "damage": "HT/10 to HT/4", "attackSkill": "9+level",
+      "special": "Disguises as treasure chest. Level based on floor. Drops items it was guarding"
+    },
+    {
+      "name": "Statue",
+      "HP": "15 + depth*5", "defenseSkill": "4 + depth", "EXP": 0,
+      "damage": "weapon.min to weapon.max", "attackSkill": "(9+depth)*2",
+      "special": "Guards an enchanted weapon. Uses the weapon's damage range. Drops the weapon on death"
+    },
+    {
+      "name": "CursePersonification",
+      "HP": "10 + depth*3", "defenseSkill": "10 + depth", "EXP": 3, "maxLvl": 5,
+      "damage": "3-5", "DR": 1,
+      "special": "Spawned by curse removal. Passes through walls"
+    }
+  ],
+  "bosses": [
+    {
+      "name": "Goo",
+      "floor": 5,
+      "HP": 80, "defenseSkill": 12, "EXP": 10,
+      "damage_normal": "2-12", "damage_pumped": "5-30",
+      "attackSkill": 25, "DR": 2,
+      "loot": "LloydsBeacon (guaranteed)",
+      "mechanics": "Pumps up for powerful attack (visible warning). Heals faster in water. Ooze on hero contact",
+      "immunities": ["Roots", "ToxicGas"],
+      "drops": "TomeOfMastery (subclass selection) via level special"
+    },
+    {
+      "name": "Tengu",
+      "floor": 10,
+      "HP": 120, "defenseSkill": 20, "EXP": 20,
+      "damage": "8-15", "attackSkill": 20, "DR": 5,
+      "mechanics": "Teleports when hit. Throws poison darts and places traps. Arena has maze sections",
+      "drops": "TomeOfMastery (subclass selection)"
+    },
+    {
+      "name": "DM-300",
+      "floor": 15,
+      "HP": 200, "defenseSkill": 18, "EXP": 30,
+      "damage": "18-24", "attackSkill": 28, "DR": 10,
+      "loot": "RingOfThorns (guaranteed)",
+      "mechanics": "Releases ToxicGas. Destroys grass/doors when moving. Very tanky",
+      "immunities": ["ToxicGas"]
+    },
+    {
+      "name": "Dwarf King",
+      "floor": 20,
+      "HP": 300, "defenseSkill": 25, "EXP": 40,
+      "damage": "20-38", "attackSkill": 32, "DR": 14,
+      "mechanics": "Summons Undead minions. Gains armor from undead sacrifices",
+      "minion": {
+        "name": "Undead",
+        "HP": 28, "defenseSkill": 15, "EXP": 0,
+        "damage": "12-16", "attackSkill": 16, "DR": 5
+      },
+      "drops": "Armor kit (class armor upgrade)"
+    },
+    {
+      "name": "Yog-Dzewa",
+      "floor": 25,
+      "HP": 300, "defenseSkill": 0, "EXP": 50,
+      "damage": "None (uses Fists)", "attackSkill": 0,
+      "mechanics": "Stationary. Spawns RottingFist and BurningFist. Spawns Larvae. Cannot be directly killed until Fists are defeated",
+      "fists": {
+        "RottingFist": {
+          "HP": 300, "defenseSkill": 25, "EXP": 0,
+          "damage": "24-36", "attackSkill": 36, "DR": 15,
+          "special": "Heals significantly each turn. Applies Ooze on hit"
+        },
+        "BurningFist": {
+          "HP": 200, "defenseSkill": 25, "EXP": 0,
+          "damage": "20-32", "attackSkill": 36, "DR": 15,
+          "special": "Ranged fire attack. Seeds Fire blobs. Immune to fire"
+        }
+      },
+      "larvae": {
+        "HP": 25, "defenseSkill": 20, "EXP": 0,
+        "damage": "15-20", "attackSkill": 30, "DR": 8
+      }
+    }
+  ],
+  "npcs": [
+    {"name": "Ghost", "quest_region": "Sewers (floor 2-3)", "quest": "Kill FetidRat. Reward: choice of weapon or armor"},
+    {"name": "Wandmaker", "quest_region": "Prison (floor 7-8)", "quest": "Collect CorpseDust or seeds. Reward: choice of 2 wands"},
+    {"name": "Blacksmith", "quest_region": "Caves (floor 12-13)", "quest": "Mine DarkGold ore. Reward: reforge/upgrade weapon"},
+    {"name": "Imp", "quest_region": "Dwarf City (floor 17-18)", "quest": "Kill monks/golems or collect DwarfTokens. Reward: shop access"},
+    {"name": "RatKing", "location": "Sewer boss floor (hidden room)", "description": "Harmless NPC. Defense skill 1000 (unhittable)"},
+    {"name": "Shopkeeper", "locations": [6, 11, 16, 21], "description": "Sells items. Teleports away if attacked"},
+    {"name": "Bee", "source": "Released from Honeypot", "HP": "(3+level)*5", "damage": "HT/10 to HT/4", "description": "Ally mob that attacks enemies"}
+  ]
+}

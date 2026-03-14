@@ -1,0 +1,285 @@
+{
+  "meta": {
+    "game": "Pixel Dungeon",
+    "version": "1.9.1",
+    "source": "https://github.com/watabou/pixel-dungeon",
+    "generated": "2026-03-14"
+  },
+  "wands": {
+    "base_mechanics": {
+      "usages_to_identify": 40,
+      "time_to_zap": 1.0,
+      "initial_charges": 2,
+      "max_charges": "min(initialCharges + level, 9)",
+      "charge_time": "40 turns (non-Mage), 40 / sqrt(1 + level) turns (Mage)",
+      "melee_tier": "1 + level / 3",
+      "melee_min": "tier",
+      "melee_max": "(tier*tier - tier + 10) / 2 + level",
+      "durability": "6 * (level < 16 ? 16 - level : 1)",
+      "price": 50,
+      "random_generation": "50% +1, then 15% of those become +2",
+      "class_restriction": "Only Mage can equip as melee weapon"
+    },
+    "types": [
+      {
+        "name": "WandOfMagicMissile",
+        "initial_charges": 3,
+        "damage": "Random.Int(1, 6 + level*2)",
+        "damage_range_at_0": "[1, 5]",
+        "distribution": "Uniform",
+        "always_known": true,
+        "special": "DISENCHANT: consumes self to upgrade another wand +1 and grant ScrollOfUpgrade effect. Costs 2 turns"
+      },
+      {
+        "name": "WandOfFirebolt",
+        "damage": "Random.Int(1, 8 + level^2)",
+        "damage_range_at_0": "[1, 7]",
+        "distribution": "Uniform",
+        "effect": "Applies Burning, seeds Fire along path on flammable tiles",
+        "can_self_kill": true
+      },
+      {
+        "name": "WandOfLightning",
+        "damage": "Random.Int(5 + level/2, 10 + level)",
+        "damage_range_at_0": "[5, 9]",
+        "distribution": "Uniform",
+        "effect": "Chains to adjacent un-hit targets, each bounce halves min damage. 2x damage in water",
+        "can_self_kill": true
+      },
+      {
+        "name": "WandOfDisintegration",
+        "damage": "Random.NormalIntRange(lvl, 8 + lvl^2/3) where lvl = power + numTargets",
+        "distribution": "Normal (triangular)",
+        "effect": "Piercing beam hits ALL characters in path. More targets = more damage each. Destroys doors/signs, converts high grass"
+      },
+      {
+        "name": "WandOfAvalanche",
+        "damage": "Random.Int(2, 6 + (size-d)*2) where size = 1+level/3, d = distance from center",
+        "damage_range_at_0": "[2, 7] at center",
+        "distribution": "Uniform",
+        "effect": "AoE. Paralysis chance decreases with distance (2-6 turns). Camera shake",
+        "can_self_kill": true
+      },
+      {
+        "name": "WandOfPoison",
+        "damage": "None (DoT)",
+        "effect": "Applies Poison for durationFactor * (5 + power) turns"
+      },
+      {
+        "name": "WandOfAmok",
+        "damage": "None",
+        "effect": "On enemy: Amok for 3+power turns (forced attacking). On self: Vertigo"
+      },
+      {
+        "name": "WandOfSlowness",
+        "damage": "None",
+        "effect": "Slow for Slow.duration/3 + power turns"
+      },
+      {
+        "name": "WandOfBlink",
+        "damage": "None",
+        "effect": "Teleports self up to level+4 cells in a line"
+      },
+      {
+        "name": "WandOfTeleportation",
+        "damage": "None",
+        "effect": "On self: random teleport. On enemy: teleports to random respawn cell (10 attempts)"
+      },
+      {
+        "name": "WandOfFlock",
+        "damage": "None",
+        "effect": "Summons level+2 invulnerable sheep for level+3 turns"
+      },
+      {
+        "name": "WandOfReach",
+        "damage": "None",
+        "effect": "Range power+4 cells. On creature: swap positions. On item heap: grab item. On chest/tomb: open remotely"
+      },
+      {
+        "name": "WandOfRegrowth",
+        "damage": "None",
+        "effect": "Converts empty tiles to grass along path. Seeds Regrowth blob amount = (power+2)*20"
+      }
+    ]
+  },
+  "potions": {
+    "base_mechanics": {
+      "can_throw": true,
+      "shatter_effect": "varies by type",
+      "freeze_converts_to": "varies (e.g., Liquid Flame -> Frost Potion area)",
+      "price": 30
+    },
+    "types": [
+      {"name": "PotionOfHealing", "effect": "Restores all HP. Cures Poison, Cripple, Weakness, Bleeding"},
+      {"name": "PotionOfStrength", "effect": "Permanently increases STR by 1"},
+      {"name": "PotionOfMight", "effect": "Permanently increases STR by 1 and max HP by 5"},
+      {"name": "PotionOfExperience", "effect": "Grants hero enough EXP for next level up"},
+      {"name": "PotionOfMindVision", "effect": "Reveals all mobs on the level for MindVision.DURATION turns"},
+      {"name": "PotionOfInvisibility", "effect": "Grants Invisibility for Invisibility.DURATION turns"},
+      {"name": "PotionOfLevitation", "effect": "Grants Levitation for Levitation.DURATION turns. Reveals traps when floating"},
+      {"name": "PotionOfFrost", "effect": "Freezes all adjacent creatures (3x3 area). Applies Frost debuff. Extinguishes fire"},
+      {"name": "PotionOfLiquidFlame", "effect": "Sets 3x3 area on fire. Applies Burning to creatures in range"},
+      {"name": "PotionOfToxicGas", "effect": "Creates ToxicGas cloud (volume 1000) at location"},
+      {"name": "PotionOfParalyticGas", "effect": "Creates ParalyticGas cloud (volume 1000) at location"},
+      {"name": "PotionOfPurity", "effect": "Removes gas blobs in 5-tile radius. Cures Paralysis and makes immune to gas briefly"}
+    ]
+  },
+  "scrolls": {
+    "base_mechanics": {
+      "read_time": 1.0,
+      "fire_destroys": true,
+      "price": 15
+    },
+    "types": [
+      {"name": "ScrollOfIdentify", "effect": "Identifies one item in inventory"},
+      {"name": "ScrollOfUpgrade", "effect": "Upgrades one item by +1. Repairs item to max durability. May remove curse"},
+      {"name": "ScrollOfEnchantment", "effect": "Applies random enchantment to weapon or glyph to armor"},
+      {"name": "ScrollOfRemoveCurse", "effect": "Removes curses from all equipped and carried items"},
+      {"name": "ScrollOfMagicMapping", "effect": "Reveals entire level map including hidden rooms and traps"},
+      {"name": "ScrollOfTeleportation", "effect": "Teleports hero to random location on current level"},
+      {"name": "ScrollOfRecharging", "effect": "Fully recharges all equipped wands"},
+      {"name": "ScrollOfMirrorImage", "effect": "Creates NImages.NIMAGES mirror images of the hero"},
+      {"name": "ScrollOfLullaby", "effect": "Puts all visible enemies to Sleep"},
+      {"name": "ScrollOfTerror", "effect": "Applies Terror to all visible enemies, making them flee"},
+      {"name": "ScrollOfChallenge", "effect": "Alerts and enrages all enemies on the level (like reading a scroll near enemies)"},
+      {"name": "ScrollOfPsionicBlast", "effect": "Deals massive damage to all visible enemies. Also damages and blinds the hero"},
+      {"name": "ScrollOfWipeOut", "effect": "Kills all visible enemies instantly"}
+    ]
+  },
+  "food": {
+    "hunger_system": {
+      "max_hunger": 450,
+      "hungry_threshold": 260,
+      "starving_threshold": 360,
+      "hunger_per_step": 10,
+      "stair_cost": 36,
+      "rogue_hunger_multiplier": 1.2,
+      "starving_damage": "1 HP per step when starving"
+    },
+    "types": [
+      {"name": "Food (Ration)", "hunger_restored": 450, "notes": "Standard food ration"},
+      {"name": "Pasty", "hunger_restored": 450, "notes": "Same as standard ration"},
+      {"name": "OverpricedRation", "hunger_restored": 450, "notes": "Same effect as regular food, costs more from shops"},
+      {"name": "MysteryMeat", "hunger_restored": 450, "notes": "Random negative effect: Burning, Poison, or Paralysis"},
+      {"name": "ChargrilledMeat", "hunger_restored": 450, "notes": "Cooked MysteryMeat. Safe to eat, no negative effects"},
+      {"name": "FrozenCarpaccio", "hunger_restored": 450, "notes": "Frozen MysteryMeat. Safe to eat, grants random positive buff"}
+    ]
+  },
+  "rings": {
+    "base_mechanics": {
+      "activate_on_equip": true,
+      "max_ring_slots": 2,
+      "ticks_to_identify": 200,
+      "time_to_equip": 1.0,
+      "cursed_effect": "Negative bonus applied while equipped",
+      "price": 80,
+      "durability": "level <= 1: indestructible; level >= 2: 100 * (level < 16 ? 16-level : 1)",
+      "random_generation": "Random.Int(1,3) levels; 70% upgraded, 30% degraded+cursed",
+      "rogue_auto_identifies": true
+    },
+    "types": [
+      {
+        "name": "RingOfAccuracy",
+        "formula": "1.4 ^ bonus",
+        "effect": "Multiplies attack accuracy",
+        "scaling": {"-3": "0.364x", "-1": "0.714x", "+1": "1.4x", "+2": "1.96x", "+3": "2.744x"}
+      },
+      {
+        "name": "RingOfEvasion",
+        "formula": "1.2 ^ bonus",
+        "effect": "Multiplies defense/evasion skill",
+        "scaling": {"-3": "0.579x", "-1": "0.833x", "+1": "1.2x", "+2": "1.44x", "+3": "1.728x"}
+      },
+      {
+        "name": "RingOfHaste",
+        "formula": "time * 1.1^(-bonus)",
+        "effect": "Reduces time spent on all actions",
+        "scaling": {"-3": "1.331x slower", "-1": "1.1x slower", "+1": "0.909x (9.1% faster)", "+2": "0.826x (17.4% faster)", "+3": "0.751x (24.9% faster)"}
+      },
+      {
+        "name": "RingOfElements",
+        "resist_formula": "level / (level + 3) chance to resist",
+        "duration_formula": "(2 + 0.5*level) / (2 + level), approaches 0.5 at infinity",
+        "effect": "Chance to resist elemental damage; reduces debuff durations",
+        "resisted_sources": ["Burning", "ToxicGas", "Poison", "Lightning", "Warlock", "Eye", "Yog.BurningFist"],
+        "scaling_resist": {"+1": "25%", "+2": "40%", "+3": "50%", "+5": "62.5%", "+10": "76.9%"},
+        "scaling_duration": {"+1": "83.3%", "+2": "75%", "+3": "70%", "+5": "64.3%", "+10": "58.3%"}
+      },
+      {
+        "name": "RingOfDetection",
+        "formula": "search radius = 1 + positive_level + negative_level",
+        "effect": "Increases search range for traps and secret doors",
+        "scaling": {"+1": "radius 2", "+2": "radius 3", "+3": "radius 4"}
+      },
+      {
+        "name": "RingOfShadows",
+        "formula": "stealth += level (additive)",
+        "effect": "Increases stealth, making hero harder to detect",
+        "notes": "Rogue starts with +1 Ring of Shadows (pre-identified)"
+      },
+      {
+        "name": "RingOfPower",
+        "formula": "wand_power = wand.effectiveLevel + ring.level (min 0)",
+        "effect": "Directly additive to wand power level"
+      },
+      {
+        "name": "RingOfHerbalism",
+        "seed_formula": "Random.Int(18) <= Random.Int(level + 1)",
+        "dew_formula": "Random.Int(6) <= Random.Int(level + 1)",
+        "effect": "Increases seed/dew drop from trampling grass. Cursed: no drops at all",
+        "scaling_seed": {"+0": "5.6%", "+1": "8.3%", "+2": "11.1%", "+3": "13.9%"},
+        "scaling_dew": {"+0": "16.7%", "+1": "25%", "+2": "33.3%", "+3": "41.7%"}
+      },
+      {
+        "name": "RingOfSatiety",
+        "formula": "hunger_per_tick = 10 - level",
+        "effect": "Reduces hunger rate. At +10: hunger never increases",
+        "scaling": {"+1": "9/tick", "+3": "7/tick", "+5": "5/tick", "+10": "0/tick (immune)"}
+      },
+      {
+        "name": "RingOfMending",
+        "formula": "regen_delay = 10 / 1.2^bonus",
+        "effect": "Increases natural HP regeneration rate (1 HP per delay ticks)",
+        "scaling": {"-1": "12.0 ticks", "+0": "10.0 ticks", "+1": "8.33 ticks", "+2": "6.94 ticks", "+3": "5.79 ticks"}
+      },
+      {
+        "name": "RingOfThorns",
+        "formula": "reflects Random.IntRange(0, damage) back to attacker",
+        "effect": "Binary effect: reflects 0-100% of melee damage. Not upgradable",
+        "not_upgradable": true,
+        "drop_source": "DM-300 boss (guaranteed)"
+      },
+      {
+        "name": "RingOfHaggler",
+        "formula": "shop price / 2 (flat 50% discount)",
+        "effect": "Binary effect: halves shop prices. Not upgradable",
+        "not_upgradable": true,
+        "drop_source": "Thief mob"
+      }
+    ]
+  },
+  "special_items": [
+    {"name": "Amulet of Yendor", "description": "Final goal item on floor 26. Obtaining it wins the game"},
+    {"name": "Ankh", "description": "Resurrects hero on death. Uses tracked in Statistics.ankhsUsed"},
+    {"name": "Bomb", "description": "Throwable explosive. AoE damage"},
+    {"name": "DewVial", "description": "Collects dewdrops. One per run. Can store and use dew for healing"},
+    {"name": "Dewdrop", "description": "Heals 1 HP or fills DewVial"},
+    {"name": "Honeypot", "description": "Contains a Bee ally. Breaks on throw to release bee"},
+    {"name": "LloydsBeacon", "description": "Set and return teleportation beacon"},
+    {"name": "TomeOfMastery", "description": "Allows hero to choose subclass. Dropped by Tengu (floor 10 boss)"},
+    {"name": "Torch", "description": "Provides Light buff, extending view distance"},
+    {"name": "Weightstone", "description": "Imbues weapon with SPEED or ACCURACY"}
+  ],
+  "bags": [
+    {"name": "Bag", "slots": 19, "description": "Base backpack inventory"},
+    {"name": "SeedPouch", "description": "Holds all seeds"},
+    {"name": "ScrollHolder", "description": "Holds all scrolls"},
+    {"name": "WandHolster", "description": "Holds all wands"},
+    {"name": "Keyring", "description": "Holds all keys"}
+  ],
+  "keys": [
+    {"name": "IronKey", "description": "Opens locked doors on the same floor"},
+    {"name": "GoldenKey", "description": "Opens golden chests"},
+    {"name": "SkeletonKey", "description": "Opens locked doors across any floor"}
+  ]
+}
