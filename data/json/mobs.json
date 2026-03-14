@@ -69,8 +69,9 @@
       "region": "Sewers",
       "HP": 15, "defenseSkill": 5, "EXP": 3, "maxLvl": 9,
       "damage": "3-6", "attackSkill": 12, "DR": 4,
+      "speed": 2.0,
       "loot": "MysteryMeat", "loot_chance": 0.167,
-      "special": "High armor for its level"
+      "special": "2x movement speed. High armor for its level"
     },
     {
       "name": "Swarm",
@@ -92,8 +93,9 @@
       "region": "Prison",
       "HP": 20, "defenseSkill": 12, "EXP": 5, "maxLvl": 10,
       "damage": "1-7", "attackSkill": 12, "DR": 3,
+      "attack_delay": 0.5,
       "loot": "RingOfHaggler", "loot_chance": 0.01,
-      "special": "Steals an item from hero on hit, then flees"
+      "special": "0.5x attack delay (attacks twice as fast). Steals random item on hit, then flees. Drops Gold when hit while fleeing"
     },
     {
       "name": "Bandit",
@@ -106,17 +108,18 @@
       "name": "Shaman",
       "region": "Prison/Caves",
       "HP": 18, "defenseSkill": 8, "EXP": 6, "maxLvl": 14,
-      "damage": "2-6", "attackSkill": 11, "DR": 4,
+      "damage_melee": "2-6", "damage_zap": "2-12", "attackSkill": 11, "DR": 4,
       "loot": "Random scroll", "loot_chance": 0.33,
-      "special": "Ranged lightning attack that ignores armor. Applies Weakness debuff"
+      "special": "Ranged lightning zap (2-12 dmg, 1.5x in water, TIME_TO_ZAP=2f). Resists Electricity"
     },
     {
       "name": "Bat",
       "region": "Caves",
       "HP": 30, "defenseSkill": 15, "EXP": 7, "maxLvl": 15,
       "damage": "6-12", "attackSkill": 16, "DR": 4,
-      "loot": "PotionOfHealing", "loot_chance": 0.167,
-      "special": "Vampiric: heals for damage dealt on hit. Flying"
+      "speed": 2.0,
+      "loot": "PotionOfHealing", "loot_chance": 0.125,
+      "special": "2x movement speed. Vampiric: heals min(damage, HT-HP) on hit. Flying. Resists Leech"
     },
     {
       "name": "Brute",
@@ -153,17 +156,18 @@
       "name": "Warlock",
       "region": "Dwarf City",
       "HP": 70, "defenseSkill": 18, "EXP": 11, "maxLvl": 21,
-      "damage": "12-20", "attackSkill": 25, "DR": 8,
+      "damage_melee": "12-20", "damage_zap": "12-18", "attackSkill": 25, "DR": 8,
       "loot": "Random potion", "loot_chance": 0.83,
-      "special": "Ranged shadow bolt attack. Applies Weakness debuff"
+      "special": "Ranged shadow bolt (12-18 dmg). 50% Weakness on ranged hit. Resists Death"
     },
     {
       "name": "Monk",
       "region": "Dwarf City",
       "HP": 70, "defenseSkill": 30, "EXP": 11, "maxLvl": 21,
       "damage": "12-16", "attackSkill": 30, "DR": 2,
+      "attack_delay": 0.5,
       "loot": "Food", "loot_chance": 0.083,
-      "special": "Very high evasion and accuracy, low DR. Can disarm hero (knock weapon away)"
+      "special": "0.5x attack delay. Very high evasion and accuracy, low DR. 1/6 chance to disarm hero. Immune to Amok and Terror"
     },
     {
       "name": "Senior",
@@ -177,7 +181,8 @@
       "region": "Dwarf City",
       "HP": 85, "defenseSkill": 18, "EXP": 12, "maxLvl": 22,
       "damage": "20-40", "attackSkill": 28, "DR": 12,
-      "special": "Very high HP, damage, and DR. Slow. Immune to Amok and Terror"
+      "attack_delay": 1.5,
+      "special": "1.5x attack delay (slow attacker). Very high HP, damage, and DR. Immune to Amok, Terror, Sleep. Resists PsionicBlast"
     },
     {
       "name": "Succubus",
@@ -192,8 +197,9 @@
       "region": "Demon Halls",
       "HP": 100, "defenseSkill": 20, "EXP": 13, "maxLvl": 25,
       "damage": "Death gaze: 14-20", "attackSkill": 30, "DR": 10,
+      "attack_delay": 1.6,
       "loot": "Dewdrop", "loot_chance": 0.5,
-      "special": "Death gaze: ranged beam attack dealing 14-20 damage (magical hit). Hits all in line. Flying"
+      "special": "1.6x attack delay. Death gaze: ranged beam hitting ALL chars in line. Flying. Resists WandOfDisintegration, Death, Leech. Immune to Terror"
     },
     {
       "name": "Scorpio",
@@ -255,11 +261,12 @@
       "floor": 5,
       "HP": 80, "defenseSkill": 12, "EXP": 10,
       "damage_normal": "2-12", "damage_pumped": "5-30",
-      "attackSkill": 25, "DR": 2,
-      "loot": "LloydsBeacon (guaranteed)",
-      "mechanics": "Pumps up for powerful attack (visible warning). Heals faster in water. Ooze on hero contact",
-      "immunities": ["Roots", "ToxicGas"],
-      "drops": "TomeOfMastery (subclass selection) via level special"
+      "attackSkill_normal": 15, "attackSkill_pumped_adjacent": 30, "attackSkill_pumped_ranged": 15,
+      "DR": 2,
+      "loot": "LloydsBeacon (33.3%)",
+      "mechanics": "33% chance to pump up (2f delay). Pumped attack has range 2. Heals 1 HP/turn in water. 33% Ooze on hit",
+      "immunities": ["ToxicGas", "Death", "PsionicBlast"],
+      "drops": "SkeletonKey"
     },
     {
       "name": "Tengu",

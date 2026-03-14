@@ -148,21 +148,24 @@
   },
   "food": {
     "hunger_system": {
-      "max_hunger": 450,
       "hungry_threshold": 260,
       "starving_threshold": 360,
       "hunger_per_step": 10,
       "stair_cost": 36,
       "rogue_hunger_multiplier": 1.2,
-      "starving_damage": "1 HP per step when starving"
+      "shadows_hunger_multiplier": 1.5,
+      "starving_damage": "1 HP per tick, 30% chance (Random.Float < 0.3)",
+      "time_to_eat": 3.0,
+      "warrior_bonus": "Eating heals 5 HP",
+      "mage_bonus": "Eating recharges 1 charge on all wands"
     },
     "types": [
-      {"name": "Food (Ration)", "hunger_restored": 450, "notes": "Standard food ration"},
-      {"name": "Pasty", "hunger_restored": 450, "notes": "Same as standard ration"},
-      {"name": "OverpricedRation", "hunger_restored": 450, "notes": "Same effect as regular food, costs more from shops"},
-      {"name": "MysteryMeat", "hunger_restored": 450, "notes": "Random negative effect: Burning, Poison, or Paralysis"},
-      {"name": "ChargrilledMeat", "hunger_restored": 450, "notes": "Cooked MysteryMeat. Safe to eat, no negative effects"},
-      {"name": "FrozenCarpaccio", "hunger_restored": 450, "notes": "Frozen MysteryMeat. Safe to eat, grants random positive buff"}
+      {"name": "Food (Ration)", "hunger_restored": 260, "price": 10, "notes": "Restores to HUNGRY threshold"},
+      {"name": "Pasty", "hunger_restored": 360, "price": 20, "notes": "Full hunger restoration to STARVING threshold"},
+      {"name": "OverpricedRation", "hunger_restored": 100, "price": 20, "notes": "Restores STARVING-HUNGRY = 100 hunger units"},
+      {"name": "MysteryMeat", "hunger_restored": 100, "price": 5, "notes": "20% each: Burning, Roots, Poison(HT/5), Slow; 20% nothing"},
+      {"name": "ChargrilledMeat", "hunger_restored": 100, "price": 5, "notes": "Cooked MysteryMeat via fire. Safe to eat"},
+      {"name": "FrozenCarpaccio", "hunger_restored": 100, "price": 10, "notes": "Frozen MysteryMeat. 20% each: Invisibility, Barkskin(HT/4), cure debuffs, heal HT/4; 20% nothing"}
     ]
   },
   "rings": {
