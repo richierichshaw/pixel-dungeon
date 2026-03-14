@@ -1,0 +1,97 @@
+{
+  "meta": {
+    "game": "Shattered Pixel Dungeon",
+    "version": "3.3.7",
+    "note": "Damage formulas: min(lvl) = tier + lvl, max(lvl) = 5*(tier+1) + lvl*(tier+1). STR req: (8 + tier*2) - floor((sqrt(8*lvl+1)-1)/2)"
+  },
+  "damage_formulas": {
+    "melee_min": "tier + level",
+    "melee_max": "5 * (tier + 1) + level * (tier + 1)",
+    "str_requirement": "(8 + tier * 2) - floor((sqrt(8 * level + 1) - 1) / 2)",
+    "str_bonus_damage": "Random(0, excessSTR) added to damage",
+    "encumbrance_delay_penalty": "delay * 1.2^encumbrance",
+    "encumbrance_accuracy_penalty": "accuracy / 1.5^encumbrance"
+  },
+  "augmentation": {
+    "speed": { "damage_factor": 0.7, "delay_factor": 0.667, "description": "70% damage, 1.5x attack speed" },
+    "damage": { "damage_factor": 1.5, "delay_factor": 1.667, "description": "150% damage, 0.6x attack speed" },
+    "none": { "damage_factor": 1.0, "delay_factor": 1.0, "description": "Normal" }
+  },
+  "melee_weapons": {
+    "tier_1": [
+      { "name": "Worn Shortsword", "tier": 1, "min": 1, "max": 10, "dly": 1.0, "acu": 1.0, "rch": 1, "str": 10, "notes": "Warrior starting weapon" },
+      { "name": "Dagger", "tier": 1, "min": 1, "max": 10, "dly": 1.0, "acu": 1.2, "rch": 1, "str": 10, "notes": "Surprise attack bonus: 75% toward max damage" },
+      { "name": "Gloves", "tier": 1, "min": 1, "max": 5, "dly": 0.5, "acu": 1.0, "rch": 1, "str": 10, "notes": "2x attack speed. Huntress starting weapon" },
+      { "name": "Rapier", "tier": 1, "min": 1, "max": 10, "dly": 1.0, "acu": 1.0, "rch": 1, "str": 10, "notes": "+1 DEF. Lunge ability. Duelist starting weapon" },
+      { "name": "Cudgel", "tier": 1, "min": 1, "max": 10, "dly": 1.0, "acu": 1.4, "rch": 1, "str": 10, "notes": "High accuracy. Cleric starting weapon" }
+    ],
+    "tier_2": [
+      { "name": "Shortsword", "tier": 2, "min": 2, "max": 15, "dly": 1.0, "acu": 1.0, "rch": 1, "str": 12, "notes": "Cleave ability" },
+      { "name": "Hand Axe", "tier": 2, "min": 2, "max": 15, "dly": 1.0, "acu": 1.32, "rch": 1, "str": 12, "notes": "High accuracy" },
+      { "name": "Spear", "tier": 2, "min": 2, "max": 20, "dly": 1.5, "acu": 1.0, "rch": 2, "str": 12, "notes": "Extended reach. Spike ability with knockback" },
+      { "name": "Quarterstaff", "tier": 2, "min": 2, "max": 15, "dly": 1.0, "acu": 1.0, "rch": 1, "str": 12, "notes": "+2 DEF. Defensive Stance ability" },
+      { "name": "Dirk", "tier": 2, "min": 2, "max": 15, "dly": 1.0, "acu": 1.0, "rch": 1, "str": 12, "notes": "Surprise attack bonus: 67% toward max" },
+      { "name": "Sickle", "tier": 2, "min": 2, "max": 20, "dly": 1.0, "acu": 0.68, "rch": 1, "str": 12, "notes": "Low accuracy, high damage. Harvest ability (bleed)" }
+    ],
+    "tier_3": [
+      { "name": "Sword", "tier": 3, "min": 3, "max": 20, "dly": 1.0, "acu": 1.0, "rch": 1, "str": 14, "notes": "Cleave ability" },
+      { "name": "Mace", "tier": 3, "min": 3, "max": 20, "dly": 1.0, "acu": 1.28, "rch": 1, "str": 14, "notes": "High accuracy. Heavy Blow ability" },
+      { "name": "Scimitar", "tier": 3, "min": 3, "max": 16, "dly": 0.8, "acu": 1.0, "rch": 1, "str": 14, "notes": "1.25x speed. Sword Dance ability" },
+      { "name": "Sai", "tier": 3, "min": 3, "max": 10, "dly": 0.5, "acu": 1.0, "rch": 1, "str": 14, "notes": "2x speed. Combo Strike ability" },
+      { "name": "Whip", "tier": 3, "min": 3, "max": 15, "dly": 1.0, "acu": 1.0, "rch": 3, "str": 14, "notes": "Reach 3. Multi-target ability" }
+    ],
+    "tier_4": [
+      { "name": "Longsword", "tier": 4, "min": 4, "max": 25, "dly": 1.0, "acu": 1.0, "rch": 1, "str": 16, "notes": "Cleave ability" },
+      { "name": "Battle Axe", "tier": 4, "min": 4, "max": 25, "dly": 1.0, "acu": 1.24, "rch": 1, "str": 16, "notes": "High accuracy. Heavy Blow ability" },
+      { "name": "Katana", "tier": 4, "min": 4, "max": 25, "dly": 1.0, "acu": 1.0, "rch": 1, "str": 16, "notes": "+3 DEF. Lunge ability" },
+      { "name": "Assassin's Blade", "tier": 4, "min": 4, "max": 25, "dly": 1.0, "acu": 1.0, "rch": 1, "str": 16, "notes": "Surprise attack bonus: 50% toward max" },
+      { "name": "Crossbow", "tier": 4, "min": 4, "max": 25, "dly": 1.0, "acu": 1.0, "rch": 1, "str": 16, "notes": "Fires darts (4-12 dmg). Charged Shot ability" },
+      { "name": "Runic Blade", "tier": 4, "min": 4, "max": 25, "dly": 1.0, "acu": 1.0, "rch": 1, "str": 16, "notes": "+6 per upgrade level (not +5). Runic Slash ability" },
+      { "name": "Flail", "tier": 4, "min": 4, "max": 35, "dly": 1.0, "acu": 0.8, "rch": 1, "str": 16, "notes": "High damage, low accuracy. Spin ability (x3 stacks)" }
+    ],
+    "tier_5": [
+      { "name": "Greatsword", "tier": 5, "min": 5, "max": 30, "dly": 1.0, "acu": 1.0, "rch": 1, "str": 18, "notes": "Cleave ability" },
+      { "name": "War Hammer", "tier": 5, "min": 5, "max": 30, "dly": 1.0, "acu": 1.2, "rch": 1, "str": 18, "notes": "High accuracy. Heavy Blow ability" },
+      { "name": "Glaive", "tier": 5, "min": 5, "max": 40, "dly": 1.5, "acu": 1.0, "rch": 2, "str": 18, "notes": "Extended reach, high damage. Spike ability" },
+      { "name": "Greataxe", "tier": 5, "min": 5, "max": 45, "dly": 1.0, "acu": 1.0, "rch": 1, "str": 20, "notes": "Highest damage. STR req = 20. Last Stand ability" },
+      { "name": "War Scythe", "tier": 5, "min": 5, "max": 40, "dly": 1.0, "acu": 0.8, "rch": 1, "str": 18, "notes": "High damage, low accuracy. Harvest ability (bleed)" }
+    ]
+  },
+  "enchantments": {
+    "common": {
+      "weight": "50% total",
+      "types": ["Blazing", "Chilling", "Kinetic", "Shocking"]
+    },
+    "uncommon": {
+      "weight": "40% total",
+      "types": ["Blocking", "Blooming", "Elastic", "Lucky", "Projecting", "Unstable"]
+    },
+    "rare": {
+      "weight": "10% total",
+      "types": ["Corrupting", "Grim", "Vampiric"]
+    },
+    "curses": ["Annoying", "Displacing", "Dazzling", "Explosive", "Sacrificial", "Wayward", "Polarized", "Friendly"]
+  },
+  "armor": {
+    "dr_formula": "tier * (2 + level)",
+    "str_requirement": "(8 + tier * 2) - floor((sqrt(8 * level + 1) - 1) / 2)",
+    "types": [
+      { "name": "Cloth Armor", "tier": 1, "dr_base": 2, "str": 10 },
+      { "name": "Leather Armor", "tier": 2, "dr_base": 4, "str": 12 },
+      { "name": "Mail Armor", "tier": 3, "dr_base": 6, "str": 14 },
+      { "name": "Scale Armor", "tier": 4, "dr_base": 8, "str": 16 },
+      { "name": "Plate Armor", "tier": 5, "dr_base": 10, "str": 18 }
+    ],
+    "augmentation": {
+      "evasion": "More evasion, less DR per level",
+      "defense": "More DR per level, less evasion",
+      "none": "Balanced"
+    },
+    "glyphs": {
+      "common": ["Obfuscation", "Swiftness", "Viscosity", "Potential"],
+      "uncommon": ["Brimstone", "Stone", "Entanglement", "Repulsion", "Camouflage", "Flow"],
+      "rare": ["Affection", "AntiMagic", "Thorns"],
+      "curses": ["AntiEntropy", "Corrosion", "Displacement", "Metabolism", "Multiplicity", "Stench", "Overgrowth", "Bulk"]
+    }
+  }
+}

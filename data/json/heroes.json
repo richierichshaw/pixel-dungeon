@@ -1,0 +1,166 @@
+{
+  "meta": {
+    "game": "Pixel Dungeon",
+    "version": "1.9.1",
+    "source": "https://github.com/watabou/pixel-dungeon",
+    "generated": "2026-03-14",
+    "note": "Stats extracted from source code for game stats tracking"
+  },
+  "base_stats": {
+    "starting_hp": 20,
+    "starting_str": 10,
+    "starting_attack_skill": 10,
+    "starting_defense_skill": 5,
+    "starting_level": 1,
+    "hp_per_level": 5,
+    "attack_skill_per_level": 1,
+    "defense_skill_per_level": 1,
+    "exp_formula": "5 + level * 5",
+    "view_distance": 8,
+    "base_speed": 1.0,
+    "base_awareness": 0.1
+  },
+  "combat_formulas": {
+    "hit_check": {
+      "physical": "Random.Float(attackSkill) >= Random.Float(defenseSkill)",
+      "magical": "Random.Float(attackSkill) * 2 >= Random.Float(defenseSkill)"
+    },
+    "damage_pipeline": {
+      "dr_roll": "Random.IntRange(0, enemy.dr())",
+      "effective_damage": "Math.max(damageRoll - dr_roll, 0)",
+      "note": "Sniper with ranged weapon sets dr=0 (full armor penetration)"
+    },
+    "unarmed_damage": "STR > 10 ? Random.IntRange(1, STR - 9) : 1",
+    "fury_multiplier": 1.5,
+    "fury_threshold": "HP <= HT * 0.4",
+    "weakness_str_penalty": -2,
+    "paralysis_break_chance": "Random.Int(dmg) >= Random.Int(HP)"
+  },
+  "speed_modifiers": {
+    "cripple": 0.5,
+    "slow": 0.5,
+    "speed_buff": 2.0,
+    "armor_encumbrance_speed": "speed * (1.3 ^ -excessSTR)",
+    "freerunner_sprint": 1.6,
+    "ring_of_haste": "time * (1.1 ^ -hasteLevel)"
+  },
+  "defense_modifiers": {
+    "ring_of_evasion": "defenseSkill * (1.2 ^ bonus)",
+    "ring_of_accuracy": "attackSkill * (1.4 ^ bonus)",
+    "armor_encumbrance_evasion": "defenseSkill / (1.5 ^ excessSTR)",
+    "paralysis_evasion_penalty": "evasion / 2",
+    "rogue_excess_str_bonus": "defenseSkill + excessSTR",
+    "freerunner_evasion": "evasion * 2",
+    "adjacent_ranged_penalty": "accuracy * 0.5"
+  },
+  "awareness_formulas": {
+    "rogue_base": 0.85,
+    "other_base": 0.90,
+    "formula": "1 - base ^ ((1 + min(level, 9)) * 0.5)",
+    "level_cap_for_awareness": 9,
+    "intentional_search_level": "2 * awareness - awareness^2",
+    "search_time_found": 2.0,
+    "search_time_not_found": 2.0,
+    "search_time_intentional_fail": 4.0
+  },
+  "time_costs": {
+    "rest": 1.0,
+    "search": 2.0,
+    "movement": "1.0 / speed()",
+    "stair_hunger_cost": 36
+  },
+  "classes": {
+    "warrior": {
+      "str_bonus": 1,
+      "hp_modifier": 0,
+      "starting_str": 11,
+      "starting_hp": 20,
+      "starting_weapon": "ShortSword",
+      "starting_missile": "8 Darts",
+      "starting_armor": "Cloth Armor",
+      "starting_ring": null,
+      "known_items": ["Potion of Strength"],
+      "subclasses": {
+        "gladiator": {
+          "description": "Combo system - consecutive melee hits increase damage",
+          "mechanic": "Each consecutive hit builds combo for bonus damage"
+        },
+        "berserker": {
+          "description": "Fury buff at low HP",
+          "fury_threshold": "HP <= HT * 0.4",
+          "fury_damage_multiplier": 1.5
+        }
+      }
+    },
+    "mage": {
+      "str_bonus": 0,
+      "hp_modifier": 0,
+      "starting_str": 10,
+      "starting_hp": 20,
+      "starting_weapon": "Knuckles",
+      "starting_missile": null,
+      "starting_armor": "Cloth Armor",
+      "starting_ring": null,
+      "known_items": ["Scroll of Identify"],
+      "subclasses": {
+        "warlock": {
+          "description": "Heals on kill and satisfies hunger",
+          "heal_formula": "min(HT - HP, 1 + (depth - 1) / 5)",
+          "hunger_on_kill": 10
+        },
+        "battlemage": {
+          "description": "Melee wand synergy",
+          "bonus_damage": "wand.curCharges added to melee damage",
+          "charge_restore": "1 charge restored on successful hit",
+          "full_charge_effect": "Triggers wand cast on hit when fully charged"
+        }
+      }
+    },
+    "rogue": {
+      "str_bonus": 0,
+      "hp_modifier": 0,
+      "starting_str": 10,
+      "starting_hp": 20,
+      "starting_weapon": "Dagger",
+      "starting_missile": "8 Darts",
+      "starting_armor": "Cloth Armor",
+      "starting_ring": "Ring of Shadows +1",
+      "known_items": ["Scroll of Magic Mapping"],
+      "awareness_base": 0.85,
+      "excess_str_defense_bonus": true,
+      "subclasses": {
+        "assassin": {
+          "description": "Extra damage on surprise attacks"
+        },
+        "freerunner": {
+          "description": "Enhanced evasion and speed while moving",
+          "evasion_multiplier": 2.0,
+          "speed_multiplier": 1.6,
+          "requirement": "Must not be starving or encumbered"
+        }
+      }
+    },
+    "huntress": {
+      "str_bonus": 0,
+      "hp_modifier": -5,
+      "starting_str": 10,
+      "starting_hp": 15,
+      "starting_weapon": "Dagger",
+      "starting_missile": "Boomerang (upgradeable)",
+      "starting_armor": "Cloth Armor",
+      "starting_ring": null,
+      "known_items": [],
+      "subclasses": {
+        "sniper": {
+          "description": "Missile weapons ignore armor",
+          "armor_penetration": "Sets enemy DR to 0 with ranged attacks",
+          "snipers_mark_duration": "attackDelay * 1.1"
+        },
+        "warden": {
+          "description": "Enhanced plant interactions",
+          "bonus": "Extra dewdrops/seeds from plants, Barkskin from trampling grass"
+        }
+      }
+    }
+  }
+}

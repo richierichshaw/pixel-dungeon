@@ -1,0 +1,120 @@
+{
+  "meta": {
+    "game": "Pixel Dungeon",
+    "version": "1.9.1",
+    "source": "https://github.com/watabou/pixel-dungeon",
+    "generated": "2026-03-14"
+  },
+  "level_dimensions": {
+    "width": 32,
+    "height": 32,
+    "total_cells": 1024
+  },
+  "total_floors": 26,
+  "shop_floors": [6, 11, 16],
+  "boss_floors": [5, 10, 15, 20, 25],
+  "night_mode": "Active when device hour < 7",
+  "regions": [
+    {
+      "name": "Sewers",
+      "floors": "1-4",
+      "boss_floor": 5,
+      "boss": "Goo",
+      "level_class": "SewerLevel",
+      "boss_level_class": "SewerBossLevel",
+      "quest_npc": "Sad Ghost (floors 2-3)"
+    },
+    {
+      "name": "Prison",
+      "floors": "6-9",
+      "boss_floor": 10,
+      "boss": "Tengu",
+      "level_class": "PrisonLevel",
+      "boss_level_class": "PrisonBossLevel",
+      "quest_npc": "Old Wandmaker (floors 7-8)",
+      "shop_floor": 6
+    },
+    {
+      "name": "Caves",
+      "floors": "11-14",
+      "boss_floor": 15,
+      "boss": "DM-300",
+      "level_class": "CavesLevel",
+      "boss_level_class": "CavesBossLevel",
+      "quest_npc": "Blacksmith (floors 12-13)",
+      "shop_floor": 11
+    },
+    {
+      "name": "Dwarf City",
+      "floors": "16-19",
+      "boss_floor": 20,
+      "boss": "Dwarf King",
+      "level_class": "CityLevel",
+      "boss_level_class": "CityBossLevel",
+      "quest_npc": "Ambitious Imp (floors 17-18)",
+      "shop_floor": 16
+    },
+    {
+      "name": "Demon Halls",
+      "floors": "21-24",
+      "boss_floor": 25,
+      "boss": "Yog-Dzewa",
+      "level_class": "HallsLevel",
+      "boss_level_class": "HallsBossLevel",
+      "special_floors": {
+        "21": "LastShopLevel (final shop)"
+      }
+    },
+    {
+      "name": "Amulet",
+      "floors": "26",
+      "level_class": "LastLevel",
+      "description": "Obtain the Amulet of Yendor"
+    }
+  ],
+  "item_generation_quotas": {
+    "potions_of_strength": {
+      "description": "Guaranteed to spawn based on depth quota",
+      "quota": [4, 2, 9, 4, 14, 6, 19, 8, 24, 9],
+      "interpretation": "By depth 4: 2, by depth 9: 4, by depth 14: 6, by depth 19: 8, by depth 24: 9",
+      "formula": "chance = (targetCount - currentCount) / (quotaDepth - currentDepth + 1)"
+    },
+    "scrolls_of_upgrade": {
+      "description": "Guaranteed to spawn based on depth quota",
+      "quota": [5, 3, 10, 6, 15, 9, 20, 12, 25, 13],
+      "interpretation": "By depth 5: 3, by depth 10: 6, by depth 15: 9, by depth 20: 12, by depth 25: 13"
+    },
+    "scrolls_of_enchantment": {
+      "formula": "Random.Int(12 * (1 + count)) < depth",
+      "description": "Rarer with each one found, more likely at deeper depths"
+    },
+    "dew_vial": {
+      "description": "One per run, spawns once then flag set to false"
+    }
+  },
+  "challenges": {
+    "no_food": {"mask": 1, "name": "On diet", "effect": "No food drops"},
+    "no_armor": {"mask": 2, "name": "Faith is my armor", "effect": "No armor drops"},
+    "no_healing": {"mask": 4, "name": "Pharmacophobia", "effect": "No healing potions"},
+    "no_herbalism": {"mask": 8, "name": "Barren land", "effect": "No plants/seeds"},
+    "swarm_intelligence": {"mask": 16, "name": "Swarm intelligence", "effect": "Mobs alert others when attacked"},
+    "darkness": {"mask": 32, "name": "Into darkness", "effect": "Reduced vision"},
+    "no_scrolls": {"mask": 64, "name": "Forbidden runes", "effect": "No scroll drops"}
+  },
+  "statistics_tracked": {
+    "goldCollected": "Total gold picked up",
+    "deepestFloor": "Maximum dungeon depth reached",
+    "enemiesSlain": "Total enemies killed",
+    "foodEaten": "Food items consumed",
+    "potionsCooked": "Potions brewed via alchemy",
+    "piranhasKilled": "Piranhas specifically killed",
+    "nightHunt": "Enemies killed during night mode",
+    "ankhsUsed": "Ankhs used for resurrection",
+    "duration": "Total playtime (float, seconds)",
+    "qualifiedForNoKilling": "True if currently on a no-kill run",
+    "completedWithNoKilling": "True if completed without killing on latest deepest floor",
+    "amuletObtained": "True if Amulet of Yendor obtained"
+  },
+  "stair_hunger_cost": 36,
+  "stair_hunger_formula": "Hunger.STARVING / 10 = 360 / 10 = 36"
+}
