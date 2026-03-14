@@ -105,45 +105,47 @@
   "potions": {
     "base_mechanics": {
       "can_throw": true,
-      "shatter_effect": "varies by type",
-      "freeze_converts_to": "varies (e.g., Liquid Flame -> Frost Potion area)",
-      "price": 30
+      "time_to_drink": 1.0,
+      "base_price_unknown": 20,
+      "harmful_potions": ["LiquidFlame", "ToxicGas", "ParalyticGas"],
+      "beneficial_potions": ["Experience", "Healing", "Levitation", "MindVision", "Strength", "Invisibility", "Might"]
     },
     "types": [
-      {"name": "PotionOfHealing", "effect": "Restores all HP. Cures Poison, Cripple, Weakness, Bleeding"},
-      {"name": "PotionOfStrength", "effect": "Permanently increases STR by 1"},
-      {"name": "PotionOfMight", "effect": "Permanently increases STR by 1 and max HP by 5"},
-      {"name": "PotionOfExperience", "effect": "Grants hero enough EXP for next level up"},
-      {"name": "PotionOfMindVision", "effect": "Reveals all mobs on the level for MindVision.DURATION turns"},
-      {"name": "PotionOfInvisibility", "effect": "Grants Invisibility for Invisibility.DURATION turns"},
-      {"name": "PotionOfLevitation", "effect": "Grants Levitation for Levitation.DURATION turns. Reveals traps when floating"},
-      {"name": "PotionOfFrost", "effect": "Freezes all adjacent creatures (3x3 area). Applies Frost debuff. Extinguishes fire"},
-      {"name": "PotionOfLiquidFlame", "effect": "Sets 3x3 area on fire. Applies Burning to creatures in range"},
-      {"name": "PotionOfToxicGas", "effect": "Creates ToxicGas cloud (volume 1000) at location"},
-      {"name": "PotionOfParalyticGas", "effect": "Creates ParalyticGas cloud (volume 1000) at location"},
-      {"name": "PotionOfPurity", "effect": "Removes gas blobs in 5-tile radius. Cures Paralysis and makes immune to gas briefly"}
+      {"name": "PotionOfHealing", "price": 30, "effect": "Sets HP = HT (full heal). Cures Poison, Cripple, Weakness, Bleeding"},
+      {"name": "PotionOfStrength", "price": 100, "effect": "Permanently increases STR by 1"},
+      {"name": "PotionOfMight", "price": 200, "effect": "Permanently increases STR by 1, max HP by 5, current HP by 5"},
+      {"name": "PotionOfExperience", "price": 80, "effect": "Grants exactly enough EXP for next level (maxExp - currentExp)"},
+      {"name": "PotionOfMindVision", "price": 35, "effect": "MindVision for 20 turns. Calls Dungeon.observe()"},
+      {"name": "PotionOfInvisibility", "price": 40, "effect": "Invisibility for 15 turns. Sprite alpha = 0.4"},
+      {"name": "PotionOfLevitation", "price": 35, "effect": "Levitation for 20 turns (flying, reveals traps)"},
+      {"name": "PotionOfFrost", "price": 50, "effect": "Freezes creatures within DISTANCE=2 cells"},
+      {"name": "PotionOfLiquidFlame", "price": 40, "effect": "Seeds Fire blob (volume 2) at target cell"},
+      {"name": "PotionOfToxicGas", "price": 40, "effect": "Seeds ToxicGas blob (volume 1000) at target cell"},
+      {"name": "PotionOfParalyticGas", "price": 40, "effect": "Seeds ParalyticGas blob (volume 1000) at target cell"},
+      {"name": "PotionOfPurity", "price": 50, "effect": "Clears ToxicGas/ParalyticGas within DISTANCE=2. Drinking grants GasesImmunity for 5 turns"}
     ]
   },
   "scrolls": {
     "base_mechanics": {
-      "read_time": 1.0,
+      "time_to_read": 1.0,
       "fire_destroys": true,
-      "price": 15
+      "base_price_unknown": 15,
+      "cannot_read_while_blinded": true
     },
     "types": [
-      {"name": "ScrollOfIdentify", "effect": "Identifies one item in inventory"},
-      {"name": "ScrollOfUpgrade", "effect": "Upgrades one item by +1. Repairs item to max durability. May remove curse"},
-      {"name": "ScrollOfEnchantment", "effect": "Applies random enchantment to weapon or glyph to armor"},
-      {"name": "ScrollOfRemoveCurse", "effect": "Removes curses from all equipped and carried items"},
-      {"name": "ScrollOfMagicMapping", "effect": "Reveals entire level map including hidden rooms and traps"},
-      {"name": "ScrollOfTeleportation", "effect": "Teleports hero to random location on current level"},
-      {"name": "ScrollOfRecharging", "effect": "Fully recharges all equipped wands"},
-      {"name": "ScrollOfMirrorImage", "effect": "Creates NImages.NIMAGES mirror images of the hero"},
-      {"name": "ScrollOfLullaby", "effect": "Puts all visible enemies to Sleep"},
-      {"name": "ScrollOfTerror", "effect": "Applies Terror to all visible enemies, making them flee"},
-      {"name": "ScrollOfChallenge", "effect": "Alerts and enrages all enemies on the level (like reading a scroll near enemies)"},
-      {"name": "ScrollOfPsionicBlast", "effect": "Deals massive damage to all visible enemies. Also damages and blinds the hero"},
-      {"name": "ScrollOfWipeOut", "effect": "Kills all visible enemies instantly"}
+      {"name": "ScrollOfIdentify", "price": 30, "effect": "Identifies one item in inventory"},
+      {"name": "ScrollOfUpgrade", "price": 15, "effect": "Uncurses item. If broken: fix(). Otherwise: upgrade(). +1 level"},
+      {"name": "ScrollOfEnchantment", "price": 15, "effect": "Uncurses, applies random enchantment (weapon) or glyph (armor), then fix()"},
+      {"name": "ScrollOfRemoveCurse", "price": 30, "effect": "Sets cursed=false on all equipped and carried items. Removes Weakness buff"},
+      {"name": "ScrollOfMagicMapping", "price": 25, "effect": "Maps all discoverable cells, reveals secret terrain"},
+      {"name": "ScrollOfTeleportation", "price": 40, "effect": "Teleports hero to random passable cell (10 attempts to find valid)"},
+      {"name": "ScrollOfRecharging", "price": 40, "effect": "Fully recharges all wands. Burst of 15 energy particles"},
+      {"name": "ScrollOfMirrorImage", "price": 15, "effect": "Spawns up to NIMAGES=3 mirror images in adjacent cells"},
+      {"name": "ScrollOfLullaby", "price": 50, "effect": "Applies Sleep to all mobs in field of view"},
+      {"name": "ScrollOfTerror", "price": 50, "effect": "Applies Terror (10 turns) to all mobs in field of view"},
+      {"name": "ScrollOfChallenge", "price": 15, "effect": "Beckons all mobs. Visible mobs get Rage for Level.distance turns. Activates Mimics"},
+      {"name": "ScrollOfPsionicBlast", "price": 80, "effect": "Damage to mobs: Random.IntRange(1, mob.HT*2/3). Blinds mobs 3-5 turns. Also blinds hero 3-5 turns"},
+      {"name": "ScrollOfWipeOut", "price": 100, "effect": "Kills all non-boss mobs on level. Always identified. Converts FOR_SALE/MIMIC heaps to HEAP. Not a Scroll subclass"}
     ]
   },
   "food": {
