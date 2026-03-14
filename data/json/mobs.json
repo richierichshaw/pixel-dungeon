@@ -314,7 +314,7 @@
         "RottingFist": {
           "HP": 300, "defenseSkill": 25, "EXP": 0,
           "damage": "24-36", "attackSkill": 36, "DR": 15,
-          "special": "Heals significantly each turn. Applies Ooze on hit"
+          "special": "1/3 chance Ooze on hit. Heals Random.Int(1, HT-HP) per turn on water"
         },
         "BurningFist": {
           "HP": 200, "defenseSkill": 25, "EXP": 0,
